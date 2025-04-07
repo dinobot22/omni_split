@@ -8,3 +8,4 @@ model/bge-small-zh-v1.5/
 chonkie-main
 **/test/**
 test.*
+!test.py
