@@ -1,5 +1,5 @@
 from mistletoe import Document
-from mistletoe.block_token import Heading, Paragraph, BlockCode, List, ListItem, Quote, Table, TableRow, TableCell, ThematicBreak
+from mistletoe.block_token import Heading, Paragraph, BlockCode, List, ListItem, Quote, Table, TableRow, TableCell, ThematicBreak, CodeFence
 from mistletoe.span_token import Strong, Emphasis, Link, Image, RawText
 import json
 import re
@@ -154,9 +154,28 @@ def md_to_json_list(md_content):
 
                     result.append(temp)
         # 处理代码块
-        elif isinstance(child, BlockCode):
-            code_content = child.children[0].content if hasattr(child, "children") and child.children and len(child.children) > 0 else ""
-            result.append({"content": code_content, "type": "code", "language": child.language if hasattr(child, "language") else ""})
+        elif isinstance(child, (BlockCode, CodeFence)):
+            if isinstance(child, BlockCode):
+                # BlockCode（缩进代码块）：手动添加 ``` 标记
+                code_content = child.children[0].content if hasattr(child, "children") and child.children else ""
+                language = ""
+                code_content = f"```\n{code_content}\n```"  # 添加 ``` 围栏
+            else:
+                # CodeFence（围栏代码块）：保留原始 ```language\ncontent\n```
+                code_content = child.children[0].content if hasattr(child, "children") and child.children else ""
+                language = getattr(child, "language", "")
+                
+                fence_char = getattr(child, "fence_char", "`")  # 可能是 ` 或 ~
+                fence_length = getattr(child, "fence_length", 3)  # 通常是 3
+                fence = fence_char * fence_length
+                
+                code_content = f"{fence}{language}\n{code_content}\n{fence}"
+
+            result.append({
+                "content": code_content,
+                "type": "code",
+                "language": language
+            })
 
         # 处理列表
         elif isinstance(child, List):
