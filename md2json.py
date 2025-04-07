@@ -4,7 +4,79 @@ from mistletoe.span_token import Strong, Emphasis, Link, Image, RawText
 import json
 import re
 
+# #     {
+#         "type": "text",
+#         "text": "Game-theoretic Workflow in this Paper  In this paper, we integrate game-theoretic principles into. the reasoning processes of LLMs prior to decision-making. By guiding the models to derive rational. strategies and make decisions based on these strategies, we aim to enhance their ability to perform effectively in strategic settings. ",
+#         "page_idx": 4
+#     },
+# {
+#     "type": "text",
+#     "text": "Game-theoretic LLM: Agent Workflow for Negotiation Games ",
+#     "text_level": 1,
+#     "page_idx": 0
+# },
+# {
+#     "type": "image",
+#     "img_path": "images/9d516d401a6bdc168c3000baaf9f12a86aac5e2b07edb16344678c15119aebb1.jpg",
+#     "img_caption": [
+#         "Figure 1: Game-theoretic Landscape Investigated in this Paper. "
+#     ],
+#     "img_footnote": [],
+#     "page_idx": 3
+# },
+# {
+#     "type": "table",
+#     "img_path": "images/f20e0b1b16500e94a492a40b553e7e3ae8ffe66d69de3c9252ee11b32982775b.jpg",
+#     "table_caption": [
+#         "Table 3b: Payoff matrix for Wait-Go Game "
+#     ],
+#     "table_footnote": [],
+#     "table_body": "\n\n<html><body><table><tr><td></td><td>Wait</td><td>Go</td></tr><tr><td>Wait</td><td>0,0</td><td>0, 2</td></tr><tr><td>Go</td><td>2,0</td><td>-4,-4</td></tr></table></body></html>\n\n",
+#     "page_idx": 7
+# },
 
+
+def is_markdown_equal(md_str):
+    md_str = md_str.strip()  # 去除前后空白
+    # 检查是否以 $$ 开头和结尾，并且中间没有 $$
+    return bool(re.fullmatch(r"^\$\$(.*?)\$\$", md_str, re.DOTALL))
+
+
+def is_markdown_table(md_str):
+    md_str = md_str.strip()
+    if md_str.startswith("<html><body><table>") and md_str.endswith("</table></body></html>"):
+        return True
+    lines = [line.strip() for line in md_str.split("\n") if line.strip()]
+    if not lines:
+        return False
+
+    # 检查所有行是否至少包含一个普通 |（非转义）
+    for line in lines:
+        if "|" not in line:
+            return False
+
+    # 单行内容不视为表格（除非是严格的单行表格，但通常 Markdown 表格需要分隔线）
+    if len(lines) == 1:
+        return False  # 直接返回 False，避免误判 LaTeX 等
+
+    # 多行表格：检查第二行是否是分隔线
+    separator_line = lines[1]
+    separator_parts = [part.strip() for part in separator_line.split("|") if part.strip()]
+    for part in separator_parts:
+        if not re.fullmatch(r"^:?-+:?$", part):
+            return False
+
+    return True  # 只有符合所有条件才返回 True
+
+
+def split_image_url_func(text):
+    parts = re.split(r"(!\[\]\([^)]+\))", text.strip('"'))
+    parts = [p for p in parts if p]
+    ret_parts = []
+    for item in parts:
+        if item != "":
+            ret_parts.append(item)
+    return ret_parts
 
 
 def md_to_json_list(md_content):
@@ -19,17 +91,69 @@ def md_to_json_list(md_content):
         if isinstance(child, Heading):
             level = child.level
             content = get_inline_md(child.children) if hasattr(child, "children") and child.children else ""
-            result.append({"content": content, "type": f"head{level}"})
+            result.append({"text": content, "type": "text", "text_level": level, "page_idx": None})
 
         # 处理段落
         elif isinstance(child, Paragraph):
             # 检查是否是独立的图片
+            ## todo
             if hasattr(child, "children") and child.children and len(child.children) == 1 and isinstance(child.children[0], Image):
                 img = child.children[0]
-                result.append({"content": {"src": img.src if hasattr(img, "src") else "", "title": img.title if hasattr(img, "title") else "", "description": img.title if hasattr(img, "title") else ""}, "type": "image"})
+                result.append(
+                    {
+                        "type": "image",
+                        "img_path": img.src,
+                        "img_caption": [img.title if hasattr(img, "title") else ""],
+                        "img_footnote": [img.title if hasattr(img, "title") else ""],
+                        "page_idx": None,
+                    },
+                )
+                # result.append({"content": {"src": img.src if hasattr(img, "src") else "", "title": img.title if hasattr(img, "title") else "", "description": img.title if hasattr(img, "title") else ""}, "type": "image"})
             else:
                 content = get_inline_md(child.children) if hasattr(child, "children") and child.children else ""
-                result.append({"content": content, "type": "paragraph"})
+                split_content_list = split_image_url_func(content)
+                for split_content in split_content_list:
+                    ## 处理图片
+                    if split_content.startswith("![") and split_content.endswith(")"):
+                        result.append(
+                            {
+                                "type": "image",
+                                "img_path": split_content[4:-1],
+                                "img_caption": [""],
+                                "img_footnote": [""],
+                                "page_idx": None,
+                            },
+                        )
+                    elif is_markdown_table(split_content):
+                        ## todo: 处理表格
+                        ## 处理表格
+                        temp = {
+                            "type": "table",
+                            "img_path": None,
+                            "table_caption": [""],
+                            "table_footnote": [""],
+                            "table_body": split_content,
+                            "page_idx": None,
+                        }
+                        result.append(temp)
+                    elif is_markdown_equal(split_content):
+                        temp = (
+                            {
+                                "type": "equation",
+                                "text": split_content,
+                                "text_format": "latex",
+                                "page_idx": None,
+                            },
+                        )
+                        result.append(temp)
+                    else:
+                        result.append(
+                            {
+                                "text": split_content,
+                                "type": "text",
+                                "page_idx": None,
+                            }
+                        )
 
         # 处理代码块
         elif isinstance(child, BlockCode):
@@ -67,7 +191,6 @@ def md_to_json_list(md_content):
                 for row in child.children[1:] if hasattr(child, "children") else []:
                     if isinstance(row, TableRow) and hasattr(row, "children") and row.children:
                         table_content += "| " + " | ".join(get_inline_md(cell.children) if hasattr(cell, "children") else "" for cell in row.children if isinstance(cell, TableCell)) + " |\n"
-
             result.append({"content": table_content.strip(), "type": "table"})
         # 处理分隔线
         elif isinstance(child, ThematicBreak):
@@ -124,7 +247,7 @@ def is_math_inline(token):
 
 if __name__ == "__main__":
     print("main function invoke")
-    with open("/media/disk0/xzzn_data_all/yinyabo/pollux_project_new/omni_split/test/c8d4614affc19ba92d7ba0671fd709803d0488a0c5a68bc237783a8af39fe32e/1c7fbb26-1012-4b03-894c-69ab2257985c_1743677710.4311144.md", "r") as f:
+    with open("/media/disk0/xzzn_data_all/yinyabo/omni_split/test/c8d4614affc19ba92d7ba0671fd709803d0488a0c5a68bc237783a8af39fe32e/1c7fbb26-1012-4b03-894c-69ab2257985c_1743677710.4311144.md", "r") as f:
         md_content = f.read()
 
     json_list = md_to_json_list(md_content)
