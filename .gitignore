@@ -1,0 +1,10 @@
+log/*
+logs/*
+test.ipynb
+__pycache__/**
+model/bge-reranker-base/
+model/bge-small-zh-v1.5/
+**/__pycache__/**
+chonkie-main
+**/test/**
+test.*
