@@ -113,19 +113,18 @@ def md_to_json_list(md_content):
                 content = get_inline_md(child.children) if hasattr(child, "children") and child.children else ""
                 split_content_list = split_image_url_func(content)
                 for split_content in split_content_list:
-                    ## 处理图片
                     if split_content.startswith("![") and split_content.endswith(")"):
-                        result.append(
-                            {
-                                "type": "image",
-                                "img_path": split_content[4:-1],
-                                "img_caption": [""],
-                                "img_footnote": [""],
-                                "page_idx": None,
-                            },
-                        )
+                        ##note: 处理图片
+                        temp = {
+                            "type": "image",
+                            "img_path": split_content[4:-1],
+                            "img_caption": [""],
+                            "img_footnote": [""],
+                            "page_idx": None,
+                        }
+
                     elif is_markdown_table(split_content):
-                        ## todo: 处理表格
+                        ##note:  处理表格
                         ## 处理表格
                         temp = {
                             "type": "table",
@@ -135,26 +134,25 @@ def md_to_json_list(md_content):
                             "table_body": split_content,
                             "page_idx": None,
                         }
-                        result.append(temp)
-                    elif is_markdown_equal(split_content):
-                        temp = (
-                            {
-                                "type": "equation",
-                                "text": split_content,
-                                "text_format": "latex",
-                                "page_idx": None,
-                            },
-                        )
-                        result.append(temp)
-                    else:
-                        result.append(
-                            {
-                                "text": split_content,
-                                "type": "text",
-                                "page_idx": None,
-                            }
-                        )
 
+                    elif is_markdown_equal(split_content):
+                        ##note:  处理单行公式(非行内公式)
+                        temp = {
+                            "type": "equation",
+                            "text": split_content,
+                            "text_format": "latex",
+                            "page_idx": None,
+                        }
+
+                    else:
+                        ##note: 其他的按照标准text对待.
+                        temp = {
+                            "text": split_content,
+                            "type": "text",
+                            "page_idx": None,
+                        }
+
+                    result.append(temp)
         # 处理代码块
         elif isinstance(child, BlockCode):
             code_content = child.children[0].content if hasattr(child, "children") and child.children and len(child.children) > 0 else ""
@@ -247,7 +245,7 @@ def is_math_inline(token):
 
 if __name__ == "__main__":
     print("main function invoke")
-    with open("/media/disk0/xzzn_data_all/yinyabo/omni_split/test/c8d4614affc19ba92d7ba0671fd709803d0488a0c5a68bc237783a8af39fe32e/1c7fbb26-1012-4b03-894c-69ab2257985c_1743677710.4311144.md", "r") as f:
+    with open("./test/c8d4614affc19ba92d7ba0671fd709803d0488a0c5a68bc237783a8af39fe32e/1c7fbb26-1012-4b03-894c-69ab2257985c_1743677710.4311144.md", "r") as f:
         md_content = f.read()
 
     json_list = md_to_json_list(md_content)
