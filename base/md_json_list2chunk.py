@@ -27,13 +27,13 @@ def count_words(text):
 
 
 def split_text_by_words(text, max_words, soft_words):
-    """智能分块算法"""
+    """智能分块算法，保留原始换行符"""
     chunks = []
     current_count = 0
     buffer = []
 
-    # 按自然断点分割
-    sentences = re.split(r"([。！？；\.\?!;\n])", text)
+    # 按自然断点分割，但不把换行符作为分隔符
+    sentences = re.split(r"([。！？；\.\?!])", text)
     sentences = [s for s in sentences if s.strip()]
 
     for i in range(0, len(sentences), 2):
@@ -43,7 +43,7 @@ def split_text_by_words(text, max_words, soft_words):
         # 强制分割条件
         if current_count + sentence_word_count > max_words:
             if buffer:
-                chunks.append("".join(buffer))
+                chunks.append("".join(buffer))  # 改为直接拼接，不添加额外换行
                 buffer = []
                 current_count = 0
 
@@ -58,7 +58,10 @@ def split_text_by_words(text, max_words, soft_words):
 
     if buffer:
         chunks.append("".join(buffer))
-    return chunks
+    ret_chunks = []
+    for item in chunks:
+        ret_chunks.append(item.replace("\n\n\n", "\n"))
+    return ret_chunks
 
 
 def find_balanced_split(text):
@@ -135,7 +138,7 @@ def is_section_title(item):
 def generate_placeholder(element_type, content, placeholder_map):
     placeholder = element_placeholder[element_type] + f"_{len(placeholder_map)}"
     placeholder_map.append((placeholder, element_type, content))
-    print(f"Generated placeholder: {placeholder} for {element_type} with content:\n{content}\n")
+    # print(f"Generated placeholder: {placeholder} for {element_type} with content:\n{content}\n")
     return placeholder, placeholder_map
 
 
@@ -146,6 +149,8 @@ def restore_placeholders(text, placeholder_map):
             # 直接替换为之前生成的内容
             text = text.replace(placeholder, content)
     return text
+def replace_PSEUDO_EQUATION_FLAG(text, replace_text="\n"):
+    return text.replace(PSEUDO_EQUATION_FLAG, replace_text)
 
 
 def merge_element(prev, current, placeholder_map):
@@ -286,6 +291,7 @@ def markdown_json_list2chunk_list(data, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_
     for item in middle_handle_data:
         if item["type"] == "text":
             item["text"] = restore_placeholders(item["text"], placeholder_map)
+            item["text"] = replace_PSEUDO_EQUATION_FLAG(item["text"],"\n")
     final_handle_data = middle_handle_data
     return final_handle_data
 
@@ -296,7 +302,7 @@ if __name__ == "__main__":
     SOFT_CHUNK_WORDS = 400
     HARD_LIMIT = 1400
     ##
-    with open("8aad0a79-c605-428c-aaba-19c60dd051d7_1743057906.4531188_content_list.json", "r", encoding="utf-8") as file:
+    with open("temp.json", "r", encoding="utf-8") as file:
         data = json.load(file)
     final_handle_data = markdown_json_list2chunk_list(data, MAX_CHUNK_WORDS=MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS=SOFT_CHUNK_WORDS, HARD_LIMIT=HARD_LIMIT)
     # 保存更新后的 JSON 文件

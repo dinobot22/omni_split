@@ -14,7 +14,8 @@ class MarkdownChunker:
         else:
             self.hard_limit = hard_limit
         self.clear_model = clear_model
-
+        ## 
+        # self.chunk_markdown_json = self.convert_json_list2chunk_list_func
     def convert_markdown2json_list_func(self, markdown_text):
         markdown_json_list = md2json_list_func(markdown_text)
         assert type(markdown_json_list) == list
@@ -32,9 +33,15 @@ class MarkdownChunker:
             json_list = json_clear_list
         chunk_list = markdown_json_list2chunk_list(json_list, MAX_CHUNK_WORDS=self.max_chunk_words, SOFT_CHUNK_WORDS=self.soft_chunk_words, HARD_LIMIT=self.hard_limit)
         return chunk_list
-
+    
     def chunk(self, text_content):
         markdown_json_list = self.convert_markdown2json_list_func(text_content)
+        for item in markdown_json_list:
+            if item.get("text_level",None) is not None:
+                item["text_level"] = 1
         chunk_list = self.convert_json_list2chunk_list_func(markdown_json_list)
         assert type(markdown_json_list) == list
         return chunk_list
+# import json
+# with open("temp.json","w") as f:
+#     json.dump(markdown_json_list,f,ensure_ascii=False,indent=4)

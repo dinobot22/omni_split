@@ -1,2 +1,4 @@
 mistletoe
 transformers
+markitdown[pptx,docx,xlsx,xls]
+python-docx

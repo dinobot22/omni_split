@@ -131,7 +131,7 @@ def md2json_list_func(md_content):
                             "img_path": None,
                             "table_caption": [""],
                             "table_footnote": [""],
-                            "table_body": split_content,
+                            "table_body": f"{split_content}\n",
                             "page_idx": None,
                         }
 
@@ -139,7 +139,7 @@ def md2json_list_func(md_content):
                         ##note:  处理单行公式(非行内公式)
                         temp = {
                             "type": "equation",
-                            "text": split_content,
+                            "text": f"{split_content}\n",
                             "text_format": "latex",
                             "page_idx": None,
                         }
@@ -147,7 +147,7 @@ def md2json_list_func(md_content):
                     else:
                         ##note: 其他的按照标准text对待.
                         temp = {
-                            "text": split_content,
+                            "text": f"{split_content}\n",
                             "type": "text",
                             "page_idx": None,
                         }
@@ -182,12 +182,28 @@ def md2json_list_func(md_content):
                         item_content = get_inline_md(item.children) if hasattr(item, "children") and item.children else ""
                         items.append(item_content)
 
-            result.append({"content": items, "type": "list", "ordered": child.start is not None if hasattr(child, "start") else False})
+            # result.append({"content": items, "type": "list", "ordered": child.start is not None if hasattr(child, "start") else False})
+            temp_str = ""
+            for item in items:
+                temp_str += "- " + item + "\n"
+            temp = {
+                "text": temp_str,
+                "type": "text",
+                "page_idx": None,
+            }
+            result.append(temp)
 
         # 处理引用
         elif isinstance(child, Quote):
             content = get_inline_md(child.children) if hasattr(child, "children") and child.children else ""
-            result.append({"content": content, "type": "text", "page_idx": None})
+            temp = {
+                "text": str(content)+"\n",
+                "type": "text",
+                "page_idx": None,
+            }
+            result.append(temp)
+
+            # result.append({"content": content, "type": "text", "page_idx": None})
 
         # 处理表格
         elif isinstance(child, Table):
@@ -217,7 +233,7 @@ def md2json_list_func(md_content):
         elif isinstance(child, ThematicBreak):
             result.append(
                 {
-                    "content": "\n---\n",
+                    "content": "---\n",
                     "type": "text",
                     "page_idx": None,
                 }
