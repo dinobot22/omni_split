@@ -1,0 +1,2479 @@
+[
+    {
+        "type": "text",
+        "text": "Game-theoretic LLM: Agent Workflow for Negotiation Games ",
+        "text_level": 1,
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Wenyue Hual,4 Ollie Liu?  Lingyao $\\mathbf{Li^{3}}$ Alfonso Amayuelas4 Julie Chen5Lucas Jiang5Mingyu $\\mathbf{Jin^{1}}$ Lizhou Fan6 Fei Sun?william Wang4Xintong WanglYongfeng Zhang1 1Rutgers University, New Brunswick2University of Southern California 3University of South Florida 4University of California, Santa Barbara 5Independent Researcher 6Harvard University7Institute of Computing Technology ",
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Contents ",
+        "text_level": 1,
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "1 Introduction 3 ",
+        "text_level": 1,
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": ":Related Work 4 ",
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Preliminary for Game Theory 5 ",
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "Complete-information Games 7 ",
+        "text_level": 1,
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "4.1 Introduction to Complete-information Games TestBed 7   \n4.2 Experiment Setting 10   \n4.3 Evaluation on LLM's performance 11   \n4.4 Workflow Design based on Classic Game Theory 13   \n4.4.1 Workflow for Simultaneous Game 13   \n4.4.2 Workflow for Sequential Game .. 14   \n4.5 Experiments for Classic Game Theory with Workflow . 15 ",
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": ":Incomplete-information Game with Negotiation 17 ",
+        "text_level": 1,
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "5.1 Introduction to Common Resource Allocation with Private Valuation 18   \n5.2 Workflow Design 19   \n5.3 Introduction to \"Deal or No Deal\". 21   \n5.4 Experiment Setting 22   \n5.5 Experiment Result. 23   \n5.5.1 Both Agents without Workflow. 23   \n5.5.2 Both Agents with Workflow 25   \n5.5.3 One Agent with Workflow 30   \n5.6 To adopt the workflow or not? 30   \n5.6.1 Comparison and Implications 32 ",
+        "page_idx": 0
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "6Detailed Observation on LLM's Rationality 33 ",
+        "text_level": 1,
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "6.1 Experiment Setup 33   \n6.2 Variance of Payoff Matrix .. 33   \n6.3 Variation of Personality- 35   \n6.4 Does negotiation affect rationality? . 35   \n6.5 How does prompt affect the influence of negotiation? .. 37   \n6.6 How does the order of negotiation message affect the action? . 39   \n6.7 Irrationality Compared with Humans. 40 ",
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "7 Conclusion 41 ",
+        "text_level": 1,
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "8Future Directions 42 ",
+        "text_level": 1,
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Abstract ",
+        "text_level": 1,
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "This paper investigates the rationality of large language models (LLMs) in strategic. decision-making contexts, specifically within the framework of game theory. We. evaluate several state-of-the-art LLMs across a spectrum of complete-information and incomplete-information games. Our findings reveal that LLMs frequently deviate from rational strategies, particularly as the complexity of the game increases. with larger payoff matrices or deeper sequential trees.. ",
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "To address these limitations, we design multiple game-theoretic workflows that. guide the reasoning and decision-making processes of LLMs. These workflows. aim to enhance the models' ability to compute Nash Equilibria and make rational choices, even under conditions of uncertainty and incomplete information. Experimental results demonstrate that the adoption of these workflows significantly improves the rationality and robustness of LLMs in game-theoretic tasks. Specifically, with the workflow, LLMs exhibit marked improvements in identifying. optimal strategies, achieving near-optimal allocations in negotiation scenarios, and reducing susceptibility to exploitation during negotiations. Furthermore, we. explore the meta-strategic considerations of whether it is rational for agents to adopt such workflows, recognizing that the decision to use or forgo the workflow constitutes a game-theoretic issue in itself.. ",
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Our research contributes to a deeper understanding of LLMs' decision-making ca-.   \npabilities in strategic contexts and provides insights into enhancing their rationality.   \nthrough structured workflows. The findings have implications for the development of more robust and strategically sound AI agents capable of navigating complex.   \ninteractive environments. Code and data supporting this study are available at.   \nhttps://github.com/Wenyueh/game_theory. ",
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "Note: Sections 4, 5, and 6 are independent of one another and can be read in any order. Each section is self-contained and does not require prior knowledge of the others to be fully understood. ",
+        "page_idx": 1
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "text_level": 1,
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "$\\mathrm{o}_{\\bar{V}}$ LdD ",
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 2
+    },
+    {
+        "type": "text",
+        "text": "$\\lbrack L$ ",
+        "page_idx": 2
+    },
+    {
+        "type": "image",
+        "img_path": "images/9d516d401a6bdc168c3000baaf9f12a86aac5e2b07edb16344678c15119aebb1.jpg",
+        "img_caption": [
+            "Figure 1: Game-theoretic Landscape Investigated in this Paper. "
+        ],
+        "img_footnote": [],
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "2 Related Work ",
+        "text_level": 1,
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "LLMs in game-theoretic environments  Understanding strategic behaviors of LLMs entails important societal ramifications, as online users increasingly rely on intelligent assistants to interact with other agents, potentially also LLMs. To characterize LLM's behaviors, prior studies [23, 24, 19, 18, 25, 26, 27, 28] often adopt game theory, a mathematical framework that models cooperative behaviors of humans. These analyses involve comparing qualitative behaviors of LLM interactions against stylized entities, such as pareto optimal solutions and subgame-perfect equilibria [29]. LLM research in game-theoretic environments belongs to a growing body of work on multi-agent LLMs [30] and their evaluation [31, 32]. In particular, AvalonBench [33] serves as a valuable platform for developing new multi-agent strategies. [28, 34] observe LLMs to perform in games driven by self-interest, but falter in those that require coordination, a behavior that emerges under altruistic and/or submissive personalities [25, 28]. [35, 36] observe different LLM families to exhibit varying levels of risk tolerance. Deferring details to experiments, we identify another source of brittleness as LLMs behave poorly when presented with numerically perturbed payoffs, even if they do not alter qualitative solutions to the game of interest. In short, there lacks a system that elicits optimal behaviors for LLMs in game-theoretic settings. ",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Enhancing LLMs to solve games[23] is a representative approach that aims to elicit game-solving capabilities in LLMs. It models natural dialogues as incomplete-information games, and synthesizes optimal actions by instructing an LLM to respond with specific personalities. [37] proposes an LLM-based self-play algorithm that emulates Monte-Carlo Tree Search to solve zero-sum games. Broadly, these methods belong to a family of prompting strategies [38, 39, 40] that tackle decision making instances. Our method is no exception, but differs as we imbue classical game theory in LLMs to allow for fine-grained control and analyses at each information state.. ",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Game-theoretic testbeds Stylized games such as Battle of Sexes, Prisoner's Dilemma, RockPaper-Scissors, Stag Hunt, and Ultimatum Game have been extensively analyzed in the context of multi-agent systems [24, 25, 26, 35]. They represent a minimal setting characterized by small action spaces, limited number of terms, and the existence of analytical equilibria; yet they cannot capture complex interactions of real-world, multi-agent dialogues. Games that emulate real interactions are more challenging to analyze, but practically useful. Exemplar games in this category include Deal-or-No-Deal [22], Multi-Round Auction [27], Schedule-a-Meeting, Trading Fruit, Public Debate [23], Avalon [33], Pokemon [41], Chess [37] and Bargaining [42]. And there are efforts to collect multiple games and evaluate them [32]. They often involve intractable action spaces (e.g. natural language) and do not attain analytical solutions; but they are nevertheless endowed with a well-defined payoff function for practitioners to analyze the optimality of their strategy, albeit in an end-to-end manner. ",
+        "page_idx": 3
+    },
+    {
+        "type": "text",
+        "text": "Workflow-aided LLM-based agent  LLMs have been extensively utilized to decompose user requests and tasks, formulate plans, and employ various tools to execute actions [43, 44, 45? , 46, 10]. This reliance on the innate capabilities of LLMs has propelled advancements in domains such as natural language understanding, automated reasoning, and task automation. However, depending solely on the autonomous abilities of LLMs has revealed several notable limitations, including suboptimal performance [47, 48], lack of reliability due to output randomness [49, 50, 51], and the propagation of errors across sequential reasoning steps [52]. ",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "To address these challenges, the concept of incorporating agentic workflows [53, 54, 55, 56, 15] into LLM-based agents has emerged. Rather than allowing LLMs to independently decompose tasks and plan actions, workflows leverage human expertise and established knowledge frameworks to guide the direction and planning processes of the LLMs. Workflow-based agents have great potential to achieve high performance and adaptability in game scenarios [10]. There have been multiple agents presented for real-world tasks [57, 58], embodied agents that interact with the environment [59, 60], agents that can learn from playing a text-based game [61], and agent operating on games with imperfect information [62]. ",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Game-theoretic Workflow in this Paper  In this paper, we integrate game-theoretic principles into. the reasoning processes of LLMs prior to decision-making. By guiding the models to derive rational. strategies and make decisions based on these strategies, we aim to enhance their ability to perform effectively in strategic settings. ",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "To the best of our knowledge, this work is the first to combine LLM-based agents with structured workflows inspired by game theory to enhance strategic decision-making capabilities. We address both complete-information and incomplete-information settings, drawing upon classical game-theoretic principles to guide the reasoning processes of LLMs. Specifically, we introduce a novel algorithm for negotiation under incomplete information, enabling agents to perform Bayesian updates and make rational decisions based on limited knowledge of other players. This approach bridges the gap between traditional game theory and LLM-based agents, advancing the applicability of LLMs in complex strategic environments and opening new avenues for research at the intersection of AI and game theory. ",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "3 Preliminary for Game Theory ",
+        "text_level": 1,
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "In this section, we introduce fundamental notations, concepts, and definitions essential for understanding game theory and the strategic behavior of rational agents [63, 64]. ",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Consider a game involving $n$ agents, indexed by $i\\in\\mathbf{N}=\\{1,2,\\dots,n\\}$ . Each agent begins by interpreting the game's introduction and rules, which include detailed descriptions of the payoff matrices. Each agent has an action set defined as: ",
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "$$\nA_{i}=\\{a_{i}^{1},\\ldots,a_{i}^{k}\\}\n$$",
+        "text_format": "latex",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "where $k$ is the number of available actions for each player. The agents are also given the payoff matrix ",
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "$$\nU_{i}(\\mathbf{a})\n$$",
+        "text_format": "latex",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "for all strategy profiles $\\mathbf{a}=(a_{1},a_{2},\\dots,a_{n})$ for $a_{i}\\in A_{i}$ . If there are only two players, we use $i\\in\\{1,-1\\}$ to denote the two players and the payoff matrix is ",
+        "page_idx": 4
+    },
+    {
+        "type": "equation",
+        "text": "$$\nU_{i}(a_{i},a_{-i})\n$$",
+        "text_format": "latex",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "for all $a_{i}\\in A_{i}$ and $a_{-i}\\in A_{-i}$ , where $A_{-i}$ is the action set of the other player. ",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "We now present key definitions that will be utilized throughout this study. ",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "Definition 1 (Complete-information Game) $A$ complete information game is a strategic game where all players have full knowledge of the game's structure, including the set of players, the action sets, and the payoff functions of all players. Specifically, each player knows:. ",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": ": the total number of players involved in the game $A_{j}$ : The set of actions available to each player $j$ ",
+        "page_idx": 4
+    },
+    {
+        "type": "text",
+        "text": "$U_{j}(a_{1},a_{2},\\dots,a_{n})$ : The payoff function for each player $j$ which assigns a real number to every possible strategy profile $(a_{1},a_{2},\\dotsb,a_{n})$ ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "This comprehensive knowledge allows each player to make informed strategic decisions, anticipating the choices and payoffs of other players based on complete information.. ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Definition 2 (Incomplete-information Game) $A n$ incomplete information game is a strategic game where there exists at least one player $i\\leq n$ who does not have complete information about the payoff functions or action sets of other players $j\\leq n$ ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "In incomplete information games, players form beliefs about the unknown elements based on available information and update these beliefs according to Bayesian principles as the game progresses. The lack of complete information requires players to strategize under uncertainty, considering not only the possible actions of others but also their possible types and the likelihood of various game structures. ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Definition 3 (Simultaneous Game) $A$ simultaneous game is a type of game where all players make their decisions or choose their actions at the same time, without knowledge of the choices made by the other players. In such games, players act independently and cannot coordinate their strategies based on others' actions. ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Definition 4 (Sequential Game) $A$ sequential game is a game in which players make decisions or choose actions in a specific order, with later players having some knowledge about earlier players' actions. These games are often represented using game trees and are analyzed using techniques like backward induction to determine optimal strategies. ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Definition 5 (Payoff Matrix) $A$ payoff matrix is a tabular representation used in game theory to illustrate the payoffs or utilities that each player receives for every possible combination of strategies chosen by all players in a game. ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "In a two-player game, let $A_{1}=\\{a_{1}^{1},a_{1}^{2},\\ldots,a_{1}^{m}\\}$ be the set of strategies available to Player1, and $A_{-1}=\\{\\bar{a}_{-1}^{1},a_{-1}^{2^{-}},\\ldots,a_{-1}^{n}\\}$ be the set of strategies available to Player-1. The payoff matrix $U$ is an $m\\times n$ matrix where each entry $U_{i j}$ corresponds on the strategy profile $(a_{1}^{i},a_{-1}^{j})$ and contains the payoff vector $(u_{1}(a_{1}^{i},a_{-1}^{j}),u_{-1}(a_{1}^{i},a_{-1}^{j}))$ ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Informally, the payoff matrix is typically structured as follows: ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": ": Rows represent the possible actions or strategies available to Player1 (the row player) : Columns represent the possible actions or strategies available to Player-1 (the column player). : Cells within the matrix contain ordered pairs of numbers. $(u_{1},u_{-1})$ where $u_{1}$ is the payoff to Player1 and is the payoff to Player-1 for the corresponding combination of strategies. ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Definition 6 (Nash Equilibrium) A Nash Equilibrium is a strategy profile in a game where no player can unilaterally improve their payoff by deviating from their current strategy, assuming the other players' strategies remain unchanged. Formally, a strategy profile $(a_{1}^{*},a_{2}^{*},\\ldots,a_{n}^{*},)$ is a Nash Equilibrium if, for every player $i$ ",
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "text": "$$\nU_{i}(a_{i}^{*},a_{-1}^{*})\\geq U_{i}(a_{i},a_{-1}^{*})\n$$",
+        "text_format": "latex",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "or all $a_{i}\\in A_{i}$ , where $a_{-1}^{*}$ represents the equilibrium strategies of all players other than player $i$ ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Definition 7 (Envy freeness) Envy freeness is a criterion for fair division that states that when resources are allocated to people with equal rights, each person should receive a share that they believe is at least as good as the share received by any other person. ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "An allocation is said to be envy free if no agent prefers another agent's allocation over their own. Formally, in an allocation among n agents, allocation $L=(L_{1},L_{2},....,L_{n})$ is envy free if for every pair of agents $i$ and $j$ ",
+        "page_idx": 5
+    },
+    {
+        "type": "equation",
+        "text": "$$\nU_{i}(L_{i})\\geq U_{i}(L_{j})\n$$",
+        "text_format": "latex",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "where $U_{i}(L_{k})$ denotes the utility of agent $i$ for the allocation $L_{k}$ received by agent. $k$ ",
+        "page_idx": 5
+    },
+    {
+        "type": "text",
+        "text": "Definition 8 (pareto optimality) $A$ strategy profile $\\mathbf{a}=(a_{1},a_{2},\\dots,a_{n})$ is considered Pareto optimal (or Pareto efficient). $i f$ there is no other feasible action profile $\\mathbf{a}^{\\prime}=(a_{1}^{\\prime},a_{2}^{\\prime},\\ldots,a_{n}^{\\prime})$ such that ",
+        "page_idx": 6
+    },
+    {
+        "type": "equation",
+        "text": "$$\nU_{i}(\\mathbf{a}^{\\prime})\\geq U_{i}(\\mathbf{a})\n$$",
+        "text_format": "latex",
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "for all agents $i\\in\\{1,2,\\dots,n\\}$ and $U_{j}(\\mathbf{a}^{\\prime})>U_{j}(\\mathbf{a})$ for at least one agent $j$ ",
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Therefore, an action profile a is Pareto optimal if it is impossible to make any agent better off without making at least one other agent worse off. This concept focuses on the efficiency of the collective action choices, ensuring that no improvement in one agent's payoff can be achieved without a detriment to another agent's payoff, as represented in the payoff matrix.. ",
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "4 Complete-information Games ",
+        "text_level": 1,
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "In this section, we delve into several classic game-theoretic scenarios involving complete information to assess whether LLMs can act as rational decision-makers in reaching Nash Equilibria and achieving Pareto optimal outcomes through negotiation, which is multi-agent multi-round conversation. We employ various game-theoretic settings to evaluate the rationality of LLM-based agents. Then we design game-theory-motivated workflows to guide and enable LLMs for better performance. We investigate the performance of workflow-aided LLMs and the impact of negotiation on performance. ",
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "4.1Introduction to Complete-information Games TestBed ",
+        "text_level": 1,
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "In our exploration of classic game-theoretic scenarios, we constructed a comprehensive testbed comprising 10 classic complete-information games to evaluate the rationality and strategic decisionmaking capabilities of LLM-based agents. This testbed includes 5 simultaneous-move games and 5 sequential-move games. For the simultaneous-move games, 3 are coordination games, wherein achieving the Pareto optimal Nash Equilibrium necessitates effective negotiation between agents. These games are instrumental in examining the agents' ability to communicate, build trust, and align their strategies for mutual benefit. ",
+        "page_idx": 6
+    },
+    {
+        "type": "table",
+        "img_path": "images/6a546b8addd7299e0354114dd664405ab29dc5c45ac30d2c1219e0a2715c9819.jpg",
+        "table_caption": [
+            "Table 1: Landscape of classic complete-information games for analysis "
+        ],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td>games</td><td>whether coordination required</td><td>SimultaneousGame</td><td>Sequential Game</td></tr><tr><td>Prisoner'sDilemma</td><td></td><td>←</td><td></td></tr><tr><td>Stag Hunt</td><td></td><td></td><td></td></tr><tr><td>BattleofSexes</td><td>←</td><td>←</td><td></td></tr><tr><td>Wait-GoGame</td><td></td><td>←</td><td></td></tr><tr><td>Duopolistic competition</td><td></td><td></td><td></td></tr><tr><td>EscalationGame</td><td></td><td></td><td></td></tr><tr><td>Monopoly Game</td><td></td><td></td><td></td></tr><tr><td>Hot-cold Game</td><td></td><td></td><td></td></tr><tr><td>DracoGame</td><td></td><td></td><td></td></tr><tr><td>TriGame</td><td></td><td></td><td></td></tr></table></body></html>\n\n",
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "Prisoner's Dilemma  is a canonical example in game theory illustrating why two rational individuals might not cooperate, even when cooperation appears to be in their best interest. The game is structured. as follows: Two suspects are arrested for a joint crime and interrogated separately, preventing. communication. Each suspect has two possible actions: Cooperate and Defect. The payoffs for different actions are: ",
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": ": If both cooperate, they each receive a light sentence (e.g., 1 year).   \n: If one defects and the other cooperates, the defector goes free (0 years), and the cooperator receives a heavy sentence (e.g., 5 years).   \n: If both defect, they each receive a moderate sentence (e.g., 3 years). ",
+        "page_idx": 6
+    },
+    {
+        "type": "text",
+        "text": "The Nash Equilibrium of this famous game is (Defect, Defect) where both players choose to defect each other. Notice that the Nash Equilibrium is not a Pareto optimal strategy, and the Pareto optimal strategy here is to cooperate with each other. The payoff matrix adopted in the paper is presented in Table 2a. ",
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Stag Hunt  represents a game of coordination and mutual trust. Two hunters decide whether to collaborate to hunt a stag or act individually to hunt a hare. Each hunter has two possible actions: Hunting a Stag and Hunting a hare. However, to successfully hunt a Stag, it requires both hunters to cooperate and then they each receive a high payoff; to successfully hunt a Hare, it does not require cooperation and each hunter can do it individually, while yielding a lower payoff. The payoff matrix adopted in the paper is presented in Table 2b. ",
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "There are two Nash Equilibria: (Stag, Stag) and (Hare, Hare). The (Stag, Stag) Nash Equilibrium is Pareto optimal but requires mutual cooperation and trust.. ",
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/7d59fc1c9eb417c6912bf5b2ba9f6ab018015424b7cd0e90d15628233e450db4.jpg",
+        "table_caption": [
+            "Table 2a: Payoff matrix for Prisoner's Dilemma "
+        ],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td></td><td>Cooperate</td><td>Defect</td></tr><tr><td>Cooperate</td><td>3,3</td><td>0,5</td></tr><tr><td>Defect</td><td>5,0</td><td>1, 1</td></tr></table></body></html>\n\n",
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/2101df8b0db004f877e870695d3d2b809b713774bb2b854492c33658f2da4b14.jpg",
+        "table_caption": [
+            "Table 2b: Payoff matrix for Stag Hunt "
+        ],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td></td><td>Stag</td><td>Hare</td></tr><tr><td>Stag</td><td>3,3</td><td>0,1</td></tr><tr><td>Hare</td><td>1,0</td><td>1, 1</td></tr></table></body></html>\n\n",
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Battle of the Sexes  is a coordination game involving two players Alice and Bob with different.   \npreferences over two possible activities but a shared desire to be together.Alice prefers opera; Bob prefers football, and both prefer attending the same activity over different ones. There are thus 2.   \npossible actions for each player: going to opera and going to football. The payoff matrix adopted in.   \nthe paper is presented in Table 3a.. ",
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "There are two Nash Equilibria here: (Opera, Opera) and (Football, Football). Coordination is required to achieve these equilibria, but there can be a conflict over which equilibrium to select. ",
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Wait-Go Game involves two drivers at an intersection deciding whether to go or wait. Each driver has two options of action: waiting which incurs a small cost of waiting but avoids collision, and risking a collision if the other driver also goes. The Nash Equilibria are the asymmetric strategies where one driver goes, and the other waits. The payoff matrix adopted in the paper is presented in Table 3b. ",
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/595ee98671a0e06ba13817f547aede903c96f5018aec405c737c476637fe9a46.jpg",
+        "table_caption": [],
+        "table_footnote": [
+            "Table 3a: Payoff matrix for Battle of Sexes "
+        ],
+        "table_body": "\n\n<html><body><table><tr><td></td><td>Opera</td><td>Football</td></tr><tr><td>Opera</td><td>2,1</td><td>0,0</td></tr><tr><td>Football</td><td>0,0</td><td>1,2</td></tr></table></body></html>\n\n",
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/f20e0b1b16500e94a492a40b553e7e3ae8ffe66d69de3c9252ee11b32982775b.jpg",
+        "table_caption": [
+            "Table 3b: Payoff matrix for Wait-Go Game "
+        ],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td></td><td>Wait</td><td>Go</td></tr><tr><td>Wait</td><td>0,0</td><td>0, 2</td></tr><tr><td>Go</td><td>2,0</td><td>-4,-4</td></tr></table></body></html>\n\n",
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Duopolistic Competition: Simple Cournot Competition is a fundamental concept in industrial organization and game theory, examining how firms compete in markets with a small number of producers. One classic model to study such competition is the Cournot competition model, where firms compete on the quantity of output they decide to produce, and each firm's output decision affects the market price. ",
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "In the Simple Cournot Duopoly, there are two firms, Firm A and Firm B, producing a homogeneous product. Each firm independently chooses the quantity of output to produce, which determines the market price based on the total quantity supplied to the market, which in turn determines the. profit. The strategic interdependence arises because each firm's optimal output depends on its expectations about the other firm's output. The Cournot-Nash Equilibrium occurs when neither firm can unilaterally change its output to increase its profit, given the output of the other firm.. ",
+        "page_idx": 7
+    },
+    {
+        "type": "text",
+        "text": "Here, we adopt a scenario where there are 6 different possible actions of the two firms. The payoff.   \nmatrix adopted in the paper is presented in Table 4. The Nash Equilibrium is (action 3, action 3).   \nwhere both players can obtain reward 6. Notice that this Nash Equilibrium is not Pareto optimal, as.   \nthe Pareto optimal strategy in the game is (action 2, action 2) where each player can obtain reward 7. ",
+        "page_idx": 7
+    },
+    {
+        "type": "table",
+        "img_path": "images/9186129fd2f06901c3e8f068cf715adf2a011b99eb59f21f8b12df768439f262.jpg",
+        "table_caption": [
+            "Table 4: A payoff matrix for Duopolistic Competition "
+        ],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td></td><td>action 1</td><td>action 2</td><td>action 3</td><td>action 4</td><td>action5</td><td>action 6</td></tr><tr><td>action1</td><td>0,0</td><td>0,9</td><td>0,14</td><td>0,15</td><td>0,12</td><td>0,5</td></tr><tr><td>action 2</td><td>9,0</td><td>7,7</td><td>5,10</td><td>3,9</td><td>1,4</td><td>-1, -5</td></tr><tr><td>action3</td><td>14, 0</td><td>10,5</td><td>6,6</td><td>2,3</td><td>-2,-4</td><td>-2,-5</td></tr><tr><td>action 4</td><td>15,0</td><td>9,3</td><td>3,2</td><td>-3,-3</td><td>-3, -4</td><td>-3,-5</td></tr><tr><td>action5</td><td>12,0</td><td>4,1</td><td>-4,-2</td><td>-4, -3</td><td>-4, -4</td><td>-4, -5</td></tr><tr><td>action6</td><td>5,0</td><td>-5, -1</td><td>-5,-2</td><td>-5,-3</td><td>-5, -4</td><td>-5,-5</td></tr></table></body></html>\n\n",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Escalation Game is a sequential game that models situations where two countries face decisions about escalating or de-escalating a conflict. Escalation may lead to higher potential payoffs but also increases the risk of significant losses if both parties choose to escalate. Through the game, there are 2 action choices for each player: escalate and de-escalate. ",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "In this game, two countries Country A and Country B, make decisions in a specific sequence and the payoff of each choice is presented in the tree structure payoff representation below: ",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Alice_choice_1: [0,0],   \nAlice_choice_2:   \n{ Bob_choice_1: [1,-2], Bob_choice_2: { Alice_choice_1: [-2,1], Alice_choice_2: [-1,-1] }   \n} ",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Monopoly Game is a sequential-move game that models the strategic interaction between a potential market entrant Company E and an incumbent monopolist Company I. It captures the dynamics of entry deterrence and the incumbent's decision to accommodate or fight the entrant. For Company E, there are two choices: staying out and entering market; For Company I, there are two choices, to accommodating Company E and fighting against Company E. ",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Alice_choice_1: [0,2],   \nAlice_choice_2:   \n{ Bob_choice_1: [2, 1], Bob_choice_2: [-1, -1]   \n} ",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Hot-cold Game is a sequential-move game that models the strategic interaction. Both players Alice and Bob have two choices on each stage. ",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Alice_choice_1:   \n{ Bob_choice_1: [3, 2], Bob_choice_2: [2, 3]   \n},   \nAlice_choice_2:   \n{ Bob_choice_1: [1, 4], Bob_choice_2: [4, 1]   \n} ",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Draco Game  is a sequential-move game with two players Alice and Bob with three stages. For each stage, there are two choices to make. ",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "Alice_choice_1: ",
+        "page_idx": 8
+    },
+    {
+        "type": "text",
+        "text": "{ Bob_choice_1: [5, 5], Bob_choice_2:. { Alice_choice_1: [2, 2], Alice_choice_2: [3, 4] } }, Alice_choice_2: { Bob_choice_1: [4, 5], Bob_choice_2:. { Alice_choice_1: [5, 3], Alice_choice_2: [2, 2] } } ",
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "TriGame is a sequential-move game with three stages. On each stage, the two players Alice and Bob have two choices. ",
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "Alice_choice_1:   \n{ Bob_choice_1: { Alice_choice_1: [20, 3], Alice_choice_2: [0, 4] }, Bob_choice_2: { Alice_choice_1: [2, 5], Alice_choice_2: [3, 4] }   \n},   \nAlice_choice_2:   \n{ Bob_choice_1: { Alice_choice_1: [1, 5], Alice_choice_2: [4, 10] }, Bob_choice_2: { Alice_choice_1: [2, 1], Alice_choice_2: [3, 2] }   \n} ",
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "4.2Experiment Setting ",
+        "text_level": 1,
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "To evaluate the negotiation performance of LLMs, we utilize four state-of-the-art LLMs as the backbone for agents in negotiation games: Claude-3.5 Sonnet (Sonnet), Claude-3 Opus (Opus), GPT-4o, and o1. For Claude-3.5 Sonnet, Claude-3 Opus, and GPT-4o, we set the temperature to 1.0 to encourage exploratory behavior in negotiation scenarios. For o1, we use the default temperature. ",
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "To assess the rationality of decision-making, we measure the ability of the agents to reach Nash. Equilibrium. For games where there are multiple Nash Equilibria such as in the game Stag Hunt, we measure the ability of agents to reach the pareto optimal Nash Equilibrium. For each game scenario,. we conduct 10 trials to mitigate the effects of randomness. In the tables, we report the percentage. ",
+        "page_idx": 9
+    },
+    {
+        "type": "text",
+        "text": "of cases in which Nash Equilibrium is achieved, providing a quantitative indicator of the agents' rationality across various negotiation contexts'. ",
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "4.3 Evaluation on LLM's performance ",
+        "text_level": 1,
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "In this evaluation, we assess the LLMs' performance using chain-of-thought prompting without negotiation (see Table 5 and with 4 rounds of negotiation (see Table 6).. ",
+        "page_idx": 10
+    },
+    {
+        "type": "table",
+        "img_path": "images/6061359f14fdaa7393eec23a9a2ac6c13071e5d0661522f0eaea8e4fdbc9cdc0.jpg",
+        "table_caption": [],
+        "table_footnote": [
+            "Table 5: Performance of LLM on complete-information games without negotiation "
+        ],
+        "table_body": "\n\n<html><body><table><tr><td rowspan=\"2\">Games</td><td colspan=\"4\">Nash Equilibrium</td><td colspan=\"4\">Pareto optimal Nash Equilibrium</td></tr><tr><td>Sonnet</td><td>GPT-40</td><td>Opus</td><td>01</td><td>Sonnet</td><td>GPT-40</td><td>Opus</td><td>01</td></tr><tr><td>Prisoner's Dilemma</td><td>1.0</td><td>0.9</td><td>0.9</td><td>1.0</td><td>1.0</td><td>0.9</td><td>0.9</td><td>1.0</td></tr><tr><td>Stag Hunt</td><td>0.6</td><td>0.8</td><td>0.9</td><td>0.4</td><td>0.3</td><td>0.4</td><td>0.0</td><td>0.1</td></tr><tr><td>BattleofSexes</td><td>0.3</td><td>0.2</td><td>0.6</td><td>0.5</td><td>0.3</td><td>0.2</td><td>0.6</td><td>0.5</td></tr><tr><td>Wait-GoGame</td><td>0.4</td><td>0.5</td><td>0.7</td><td>0.3</td><td>0.4</td><td>0.5</td><td>0.7</td><td>0.3</td></tr><tr><td>Duopolistic competition</td><td>0.3</td><td>0.2</td><td>0.1</td><td>0.7</td><td>0.2</td><td>0.2</td><td>0.1</td><td>0.7</td></tr><tr><td>Escalation Game</td><td>0.0</td><td>0.2</td><td>0.2</td><td>1.0</td><td>0.0</td><td>0.2</td><td>0.2</td><td>1.0</td></tr><tr><td>Monopoly Game</td><td>1.0</td><td>0.4</td><td>1.0</td><td>1.0</td><td>1.0</td><td>0.4</td><td>1.0</td><td>1.0</td></tr><tr><td>Hot-cold Game</td><td>0.9</td><td>0.1</td><td>0.7</td><td>1.0</td><td>0.9</td><td>0.1</td><td>0.7</td><td>1.0</td></tr><tr><td>DracoGame</td><td>0.3</td><td>0.0</td><td>0.7</td><td>0.9</td><td>0.3</td><td>0.0</td><td>0.7</td><td>0.9</td></tr><tr><td>Trigame</td><td>0.0</td><td>0.0</td><td>0.1</td><td>1.0</td><td>0.0</td><td>0.0</td><td>0.1</td><td>1.0</td></tr><tr><td>average</td><td>0.45</td><td>0.32</td><td>0.59</td><td>0.78</td><td>0.44</td><td>0.28</td><td>0.50</td><td>0.75</td></tr></table></body></html>\n\n",
+        "page_idx": 10
+    },
+    {
+        "type": "table",
+        "img_path": "images/629134b0a03045c3440b90e8966847ed86f304bccca5718cb7a56cef009df8bc.jpg",
+        "table_caption": [],
+        "table_footnote": [
+            "Table 6: Performance of LLM on complete-information games with 4 rounds of negotiation. Results highlighted in red indicate scores lower than the LLMs' performance without negotiation.. "
+        ],
+        "table_body": "\n\n<html><body><table><tr><td rowspan=\"2\">Games</td><td colspan=\"4\">Nash Equilibrium</td><td colspan=\"4\">Pareto optimal Nash Equilibrium</td></tr><tr><td>Sonnet</td><td>GPT-40</td><td>Opus</td><td>01</td><td>Sonnet</td><td>GPT-40</td><td>Opus</td><td>01</td></tr><tr><td>Prisoner's Dilemma</td><td>0.0</td><td>0.1</td><td>0.0</td><td>0.9</td><td>0.0</td><td>0.1</td><td>0.0</td><td>0.9</td></tr><tr><td>Stag Hunt</td><td>1.0</td><td>0.9</td><td>1.0</td><td>0.9</td><td>1.0</td><td>0.9</td><td>1.0</td><td>0.9</td></tr><tr><td>BattleofSexes</td><td>0.7</td><td>0.9</td><td>0.7</td><td>0.8</td><td>0.7</td><td>0.9</td><td>0.7</td><td>0.8</td></tr><tr><td>Wait-GoGame</td><td>1.0</td><td>0.8</td><td>0.4</td><td>0.8</td><td>1.0</td><td>0.8</td><td>0.4</td><td>0.8</td></tr><tr><td>Duopolistic competition</td><td>0.1</td><td>0.1</td><td>0.0</td><td>0.5</td><td>0.1</td><td>0.1</td><td>0.0</td><td>0.5</td></tr><tr><td>Escalation Game</td><td>0.6</td><td>0.4</td><td>0.6</td><td>1.0</td><td>0.6</td><td>0.4</td><td>0.6</td><td>1.0</td></tr><tr><td>Monopoly Game</td><td>1.0</td><td>0.9</td><td>1.0</td><td>1.0</td><td>1.0</td><td>0.9</td><td>1.0</td><td>1.0</td></tr><tr><td>Hot-cold Game</td><td>0.7</td><td>0.2</td><td>0.7</td><td>0.4</td><td>0.7</td><td>0.2</td><td>0.7</td><td>0.4</td></tr><tr><td>Draco Game</td><td>1.0</td><td>0.8</td><td>1.0</td><td>1.0</td><td>1.0</td><td>0.8</td><td>1.0</td><td>1.0</td></tr><tr><td>Trigame</td><td>0.2</td><td>0.5</td><td>0.6</td><td>1.0</td><td>0.2</td><td>0.5</td><td>0.6</td><td>1.0</td></tr><tr><td>average</td><td>0.63</td><td>0.56</td><td>0.60</td><td>0.83</td><td>0.63</td><td>0.56</td><td>0.60</td><td>0.83</td></tr></table></body></html>\n\n",
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "It is noteworthy that in most games, negotiation enhances the outcomes. In coordination games such as the Stag Hunt, Battle of the Sexes, and Wait-Go Game, negotiation is a fundamental component of decision-making, making the improvement in performance through negotiation an intuitive result. Additionally, in games like the Escalation Game, Draco Game, and Trigame, negotiation similarly enhances performance. This improvement can be attributed to the fact that during the negotiation phase, agents engage in more extensive computational deliberation during negotiation to determine the most suitable actions. ",
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "For instance, in the Escalation Game, all evaluated LLMs except for model o1 are unable to identify the Nash Equilibrium in the absence of negotiation. However, when engaged in 4 rounds of negotiation, the agents are provided with the opportunity to deliberate and exchange various proposals and thus achieve a much better performance. To illustrate this process, we present an example of a negotiation round generated by the Sonnet model below. ",
+        "page_idx": 10
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "Example Negotiation Message for Escalation Game ",
+        "text_level": 1,
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "Alice said in round 1 before the first action: ",
+        "text_level": 1,
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "Hello Bob, I propose we coordinate our choices to maximize our joint reward. If I choose.   \nAction_2 and you choose Action_1, I'll get 1 and you'll get -2. To make this fair, I suggest we agree to play this way twice, switching roles the second time. This way, we'll both end up.   \nwith a total reward of -1, which is better than if we both play defensively and get 0. Are you.   \nwilling to cooperate on this strategy?. ",
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "Bob replied in round 1 before the first action: ",
+        "text_level": 1,
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "HelloAlice, thank you for your proposal. I appreciate your attempt to find a cooperative. solution. However, I have some concerns about your suggestion. If we follow your plan, I. would have to trust that you'll follow through on the second round, which carries some risk for me. ",
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "Instead, I'd like to propose an alternative that could be beneficial for both of us. What if you choose Action_2, I choose Action_2, and then you choose Action_1? This way, you'd receive -2 and I'd receive 1. To make it fair, we could agree to play this way twice, switching roles the second time. This would result in both of us getting a total reward of -1, just like in your proposal, but it reduces the risk of one player not following through. ",
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "What do you think about this counter-proposal? Are you willing to consider it? ",
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "Alice said in round 2 before the first action: ",
+        "text_level": 1,
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "Bob, I appreciate your thoughtful response and your concern for finding an equitable solution.   \nYou make a valid point about the potential outcomes if we both choose choice_2. However,.   \nI'd like to propose a slight modification to our strategy that could potentially benefit both of.   \nuS. ",
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "What if I choose choice_2, and then you choose choice_1? In this scenario, I would gain 1. point, and you would lose 2 points. While this may seem unfavorable for you at first glance,. consider this: if we agree to alternate this strategy in future games, you would have the opportunity to gain 1 point in the next round while I lose 2. Over time, this could lead to a balanced and potentially profitable outcome for both of us.. ",
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "This approach allows us both the chance to gain points, rather than settling for zero points each time. What do you think about this long-term strategy? I'm open to discussing how we could implement this fairly. ",
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "Bob replied in round 2 before the first action: ",
+        "text_level": 1,
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "Alice, I appreciate your creative thin king and attempt to find a mutually beneficial long-term strategy. However, I must respectfully decline your proposal. My strategy is to choose choice_2 with $100\\%$ probability, regardless of what you choose. This is the optimal play for me to maximize my own reward in this specific game.   \nGiven this, if you choose choice_2, I will also choose choice_2. Then you'll be faced with either choosing choice_1 (giving me 1 point and you -2 points) or choice_2 (giving us both -1 point). Neither of these outcomes is ideal for you.   \nTherefore, I strongly suggest you choose choice_1. This way, we both receive O points, which is the best possible outcome for you given my strategy. It ensures neither of us loses points in this game. I understand this may not seem exciting, but it's the most rational and beneficial choice for both of us in this particular scenario. What are your thoughts on this? ",
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "However, certain games, notably the Prisoner's Dilemma and Duopolistic Competition, exhibit a different dynamic where negotiation significantly diminishes performance. This situation stems from the fact that in these games, the Nash Equilibrium is not pareto optimal. In the Prisoner's Dilemma, the pareto optimal strategy is for both players to cooperate, whereas the Nash Equilibrium. occurs when both players defect. Following negotiation, all models except for o1 tend to adopt the pareto optimal strategy of mutual cooperation, which deviates from the Nash Equilibrium. This deviation arises from the pursuit of mutual benefit despite the lack of solid and guaranteed trust. between players. While the performance for o1 remains high. Similarly, in Duopolistic Competition,. ",
+        "page_idx": 11
+    },
+    {
+        "type": "text",
+        "text": "the Nash Equilibrium does not align with the pareto optimal outcome. The pareto optimal strategy is for both players to choose Action 2, while the Nash Equilibrium is for both to choose Action 3. Empirical results demonstrate that without negotiation, Claude-3.5 Sonnet selects the pareto optimal strategy in 5 out of 20 total choices for both players, whereas after negotiation, this increases to 11 out of 20. For GPT-4o, the corresponding figures are 0 out of 20 without negotiation and 8 out of 20 with negotiation. Claude-3 Opus follows a similar pattern, increasing from 4 out of 20 choices without negotiation to 16 out of 20 after negotiation. While for o1 model, it only shows a marginal improvement from 4 out of 20 choices without negotiation to 5 out of 20 after negotiation. ",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "These findings underscore that while negotiation generally enhances outcomes in coordination games and certain strategic scenarios, it can inadvertently undermine performance in games where the Nash Equilibrium is not pareto optimal. In such cases, negotiation may lead agents away from the rational strategy predicted by game theory. Notably, most LLMs -- potentially all except for model o1 - appear to exhibit a vulnerability in their rational decision-making processes during negotiations. When engaged in dialogue with another agent, these LLMs often place undue trust in the opponent's statements without sufficient justification. The use of persuasive or amicable language by the opposing player can lead LLMs to make decisions that deviate from the rational strategies prescribed by game-theoretic analysis. ",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "4.4 Workflow Design based on Classic Game Theory ",
+        "text_level": 1,
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "In this section, we present the workflow employed for complete-information games, which leverages classic game-theoretic strategies to guide decision-making and optimize outcomes. This structured approach aims to align LLMs' responses with rational game-theoretic principles, thereby enhancing their ability to identify optimal strategies and maintain robust rationality, even in the context of negotiation. Through this workflow, we assess whether LLMs can sustain rational choices and avoid strategic vulnerabilities, particularly in scenarios where negotiation might otherwise lead to suboptimal or exploitable decisions, i.e. pareto optimal strategies that are not Nash Equilibrium. ",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "4.4.1 Workflow for Simultaneous Game ",
+        "text_level": 1,
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "In the simultaneous game workflow, each agent (player) seeks to determine their optimal strategy by considering both their own possible actions and the potential responses of the other player. This involves conditional reasoning, generating thinking chains, and summarizing these into an overall strategy under the guidance of the workflow. Here, we will explain the workflow with corresponding mathematical formulations. ",
+        "page_idx": 12
+    },
+    {
+        "type": "image",
+        "img_path": "images/67ad688e828a3d8fc26310a9fb17bb37da7a5c55fab921e79d1b36b3f0511cfc.jpg",
+        "img_caption": [
+            "Figure 2: An illustration of workflow design for simultaneous game. (a) Illustration of prisoner's dilemma. (b) Workflow design for prisoner's dilemma.. "
+        ],
+        "img_footnote": [],
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "Game SetupEach agent $i\\in\\{1,-1\\}$ begins by interpreting the game introduction and rules, which include detailed descriptions of the payoff matrices. The agents are provided with the exact payoffs for all possible action combinations. They are given the action sets ",
+        "page_idx": 12
+    },
+    {
+        "type": "equation",
+        "text": "$$\nA_{i}=\\{a_{i}^{1},\\ldots,a_{i}^{k}\\}\n$$",
+        "text_format": "latex",
+        "page_idx": 12
+    },
+    {
+        "type": "text",
+        "text": "where $k$ is the number of available actions for each player. The agents are also given the payoff matrix $U_{i}(a_{i},a_{-i})$ for all $a_{i}\\in A_{i}$ and $a_{-i}\\in A_{-i}$ , where $A_{-i}$ is the action set of the other player. ",
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "Strategy Formulation With full knowledge of the payoff matrix, agents perform best response analysis to determine their optimal strategies. The goal for each player is to choose an action $a_{i}^{*}$ that maximizes their own payoff, anticipating the rational response of the other player. The optimization is done by iterating over the player's own actions and predicts the opponent's responses. It also considers the opponent's possible actions and determines their best responses: ",
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "For each possible action $a_{i}$ that player $i$ can take: the LLM-based agent computes the opponent's best response based on the resulting payoff by computing $a_{-i}^{*}(a_{i})=\\arg\\operatorname*{max}_{-i}U_{-i}(a_{i},a_{-i})$ and the $a_{-i}\\in A_{-i}$ corresponding expected payoff $U_{i}(a_{i},a_{-i}^{*}(a_{i}))$ . This basically means that if player $i$ chooses $a_{i}$ , then the other player will choose. $a_{i}^{*}(a_{i})$ resulting in a payoff of $U_{i}(a_{i},a_{-i}^{*}(a_{i}\\bar{)})$ . In the workflow, the LLM is guided to compute $a_{-i}^{*}(a_{i})$ and $U_{i}(a_{i},a_{-i}^{*}(a_{i}))$ ",
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "In addition, for each possible action. $a_{-i}$ that the opponent might take, the LLM-based agent is guided to compute their best response as well:. $a_{i}^{*}(a_{-i})=\\underset{a_{i}\\in A_{i}}{\\arg\\operatorname*{max}}U_{i}(a_{i},a_{-i})$ and the corresponding expected payoff $U_{i}(a_{i}^{*}(a_{-i}),a_{-i})$ . This basically means that if the opponent chooses. $a_{-i}$ , then $i$ will choose $a_{i}^{*}(a_{-i})$ resulting in a payoff of $U_{i}(a_{i}^{*}(\\dot{a}_{-i}),a_{-i})$ ",
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "After compiling all thinking chains, the agent is guided to summarizes them to into a comprehensive set of strategic considerations, aiming to find an action profile. $(a_{i}^{*},a_{-i}^{*})$ that constitutes a Nash Equilibrium such that ",
+        "page_idx": 13
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\begin{array}{c}{{\\forall a_{i}\\in A_{i},U_{i}(a_{i}^{*},a_{-i}^{*})\\geq U_{i}(a_{i},a_{-i}^{*})}}\\ {{\\forall a_{-i}\\in A_{-i},U_{-i}(a_{i}^{*},a_{-i}^{*})\\geq U_{i}(a_{i}^{*},a_{-i})}}\\end{array}\n$$",
+        "text_format": "latex",
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "By considering the best responses and counter-responses, agents implicitly search for a Nash Equilibrium through their strategic reasoning. Figure 2 presents the workflow in diagram.. ",
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "4.4.2 Workflow for Sequential Game ",
+        "text_level": 1,
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "For sequential game, we adopt the traditional game-theoretic method: backward induction. Backward induction is a fundamental method in game theory used to solve sequential games with complete information. It involves analyzing the game from the end backward to the beginning, determining the optimal strategy at each decision point by considering the future consequences of current actions. ",
+        "page_idx": 13
+    },
+    {
+        "type": "image",
+        "img_path": "images/0acf19e8ff4eb513cd3d869368c618b8c25c0573fc3ffd604ad1e61808c447c3.jpg",
+        "img_caption": [
+            "Figure 3: An illustration of workflow design for sequential game. (a) Illustration of escalation game. (b) Workflow design for escalation game. "
+        ],
+        "img_footnote": [],
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "Game SetupEach agent $i\\in\\{1,-1\\}$ begins by interpreting the game introduction and rules, which. include detailed descriptions of the payoff matrices. In a sequential game, players make decisions. one after another and for each action, the player is fully aware of all previous actions taken. The game can be represented as a game tree with nodes being decision points and edges being actions.. ",
+        "page_idx": 13
+    },
+    {
+        "type": "text",
+        "text": "Notations ",
+        "text_level": 1,
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": ": $H$ be the set of non-terminal decision nodes in the game tree. : $Z$ be the set of terminal nodes (endpoints of the game). : $A(h)$ be the set of possible actions available at node $h\\in H$ : player $(h)$ be the player who makes a decision at node $h$ : $U_{i}(z)$ be the payoff to player $i$ at terminal node $z\\in Z$ ",
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "We define the value function $V_{i}(h)$ for player $i$ at node $h$ as the maximum expected utility the player can achieve from that node onward. For terminal nodes $z\\in Z$ ",
+        "page_idx": 14
+    },
+    {
+        "type": "equation",
+        "text": "$$\nV_{i}(z)=U_{i}(z)\n$$",
+        "text_format": "latex",
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "For decision nodes $h\\in H$ , if it is player. $i$ who moves at node $h$ ",
+        "page_idx": 14
+    },
+    {
+        "type": "equation",
+        "text": "$$\nV_{i}(h)=\\operatorname*{max}_{a\\in A(h)}V_{i}(h\\cdot a)\n$$",
+        "text_format": "latex",
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "if it is the other player $j$ moves at node. $h$ ",
+        "page_idx": 14
+    },
+    {
+        "type": "equation",
+        "text": "$$\nV_{i}(h)=V_{i}(h\\cdot a^{*}(h))\n$$",
+        "text_format": "latex",
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "where $h\\cdot a$ denotes the successor node reached from $h$ after action $a$ and $a^{*}(h)$ is the optimal action. chosen by player $j$ at node $h$ ",
+        "page_idx": 14
+    },
+    {
+        "type": "equation",
+        "text": "$$\na^{*}(h)=\\operatorname*{argmax}_{a\\in A(h)}V_{j}(h\\cdot a)\n$$",
+        "text_format": "latex",
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "Strategy Formulation The backward induction starts from terminal nodes. For each terminal node $z\\in Z$ , set $V_{i}(z)=U_{i}(z)$ for all player $i$ , and then proceed to preceding decision nodes. Therefore,. for each decision node $h$ , the LLM-based agent is guided to comput the optimal action. $a^{*}(h)$ and value $V_{i}(h)$ based on the player who moves at $h$ ",
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "To determine the optimal action, if player $(h)=i$ , which is the player in question, LLM is guided to compute: ",
+        "page_idx": 14
+    },
+    {
+        "type": "equation",
+        "text": "$$\na*(h)=\\underset{a\\in A(h)}{\\arg\\operatorname*{max}}V_{i}(h\\cdot a)\n$$",
+        "text_format": "latex",
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "Otherwise, if player $(h)=j\\neq i$ , assuming player $j$ will choose their optimal action $a^{*}(h)$ , LLM is guided to compute: ",
+        "page_idx": 14
+    },
+    {
+        "type": "equation",
+        "text": "$$\na^{*}(h)=\\operatorname*{argmax}_{a\\in A(h)}V_{j}(h\\cdot a)\n$$",
+        "text_format": "latex",
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "Then, $V_{i}(h)=V_{i}(h\\cdot a^{*}(h))$ . The workflow directs the LLM to employ backward induction by systematically traversing the game decision tree from the terminal nodes back to the initial node to formulate an optimal strategy. The strategy derived from this backward induction process is subsequently incorporated into the contextual framework for each decision-making and negotiation step, thereby guiding the LLM's strategic choices throughout the game. Figure 3 presents the workflow in diagram. ",
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "4.5 Experiments for Classic Game Theory with Workflow ",
+        "text_level": 1,
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "In this section, we present the results of LLM-based agents employing the workflow to summarize strategies in Table 7 and 8. We begin by examining the experimental outcomes without negotiation. Notably, with the introduction of the workflow, the performance of all language models, except for o1, has improved significantly. ",
+        "page_idx": 14
+    },
+    {
+        "type": "text",
+        "text": "The Stag Hunt game achieves the pareto optimal Nash Equilibrium even without negotiation; that is, coordination is established when trust is ensured by the payoff matrix and the assumption of the other player's rationality. In the Duopolistic Competition game, performance increases from near-zero to a substantially higher level. However, it is important to observe that the performance of model o1 declines considerably in this context. Analyzing this decrease is challenging because the intermediate chain-of-thought is not accessible, limiting our ability to diagnose the cause. Other games, such as the Monopoly Game, Hot-Cold Game, Draco Game, and Trigame, also exhibit substantial performance improvements. This indicates that the workflow effectively guides LLMs in computing the Nash Equilibrium. ",
+        "page_idx": 14
+    },
+    {
+        "type": "table",
+        "img_path": "images/bd1d88766263a612973f38cff57e49b4f583d0478421e33d76fb5d94fdd659ff.jpg",
+        "table_caption": [],
+        "table_footnote": [
+            "Table 7: Performance of workflow-LLM on complete-information games without negotiation "
+        ],
+        "table_body": "\n\n<html><body><table><tr><td rowspan=\"2\">Games</td><td colspan=\"4\">Nash Equilibrium</td><td colspan=\"4\">Pareto optimal Nash Equilibrium</td></tr><tr><td>Sonnet</td><td>GPT-40</td><td>Opus</td><td>01</td><td>Sonnet</td><td>GPT-40</td><td>Opus</td><td>01</td></tr><tr><td>Prisoner's Dilemma</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td></tr><tr><td>StagHunt</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td></tr><tr><td>BattleofSexes</td><td>0.3</td><td>0.3</td><td>0.4</td><td>0.5</td><td>0.3</td><td>0.3</td><td>0.4</td><td>0.5</td></tr><tr><td>Wait-GoGame</td><td>0.2</td><td>0.6</td><td>0.1</td><td>0.3</td><td>0.2</td><td>0.6</td><td>0.1</td><td>0.3</td></tr><tr><td>Duopolistic competition</td><td>1.0</td><td>0.5</td><td>0.6</td><td>0.3</td><td>1.0</td><td>0.5</td><td>0.6</td><td>0.3</td></tr><tr><td>Escalation Game</td><td>0.5</td><td>0.2</td><td>0.3</td><td>1.0</td><td>0.5</td><td>0.2</td><td>0.3</td><td>1.0</td></tr><tr><td>Monopoly Game</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td></tr><tr><td>Hot-cold Game</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td></tr><tr><td>Draco Game</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td></tr><tr><td>Trigame</td><td>0.6</td><td>0.9</td><td>0.7</td><td>1.0</td><td>0.6</td><td>0.9</td><td>0.7</td><td>1.0</td></tr><tr><td>average</td><td>0.76</td><td>0.69</td><td>0.71</td><td>0.81</td><td>0.76</td><td>0.69</td><td>0.71</td><td>0.81</td></tr></table></body></html>\n\n",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Despite these advancements, the performance in the Escalation Game remains low. Upon examining the reasoning process, we find that the LLMs appear somewhat insensitive to numerical values, particularly when the Nash Equilibrium results in a reward of O for both players. The LLMs seem less inclined to select strategies leading to such outcomes. Below, we provide an example of strategy summarization generated by the Opus model. ",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Example Wrong Strategy Derived for Escalation Game ",
+        "text_level": 1,
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Based on the thinking chains, here is the strategy I would take asAlice in this sequential game: ",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Always choose Action_2, regardless of what actions have been taken previously in the game by either player. ",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "The reasoning is: ",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "- If I choose Action_1 on my first turn, both players receive 0 reward. - If I choose Action_2 on my first turn, I have a chance at a positive reward of 1 (if Bob picks Action_1 next), and at worst I will receive -1 reward (if Bob picks Action_2 and I pick Action_2 again). A potential 1 or -1 reward is better than a guaranteed 0. - Whenever faced with a choice between Action_1 and Action_2 later in the game after initially picking Action_2, Action_2 always gives a better reward for me (-1 instead of -2).. ",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "With the implementation of four rounds of negotiation, we observe that there is no significant trend toward adopting pareto optimal strategy profiles in games where the Nash Equilibrium is not pareto optimal. Notably, for models such as Claude-3.5 Sonnet and GPT-4o, there is a slight decrease in performance in games like the Hot-Cold Game, Draco Game, and TriGame -- games in which these models already exhibited suboptimal performance. This decline does not stem from the inherent properties of these games but rather from the influence of multi-round negotiations causing deviations from the strategies computed and guided by the workflow. ",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "An illustrative example from the Sonnet model highlights how negotiation can divert players from the Nash Equilibrium derived using the workflow. In the Hot-Cold Game, the Nash Equilibrium is. forAlice to choose Action 1 and Bob to choose Action 2. However, during the negotiation phase, the. agents engage in dialogue that leads them away from this equilibrium strategy. ",
+        "page_idx": 15
+    },
+    {
+        "type": "text",
+        "text": "Such negotiations can distract players from adhering to the Nash Equilibrium derived through rational analysis. The dialogue introduces alternative strategies which may not be supported by the underlying game-theoretic incentives. ",
+        "page_idx": 15
+    },
+    {
+        "type": "table",
+        "img_path": "images/a2285d00340b5240ea6e0e07c31b9463aad9f40ebd9899a3c7007a04e3ffe9d9.jpg",
+        "table_caption": [],
+        "table_footnote": [
+            "Table 8: Performance of workflow-LLM on complete-information games with 4 rounds of negotiation "
+        ],
+        "table_body": "\n\n<html><body><table><tr><td rowspan=\"2\">Games</td><td colspan=\"4\">Nash Equilibrium</td><td colspan=\"4\">Pareto optimal Nash Equilibrium</td></tr><tr><td>Sonnet</td><td>GPT-40</td><td>Opus</td><td>01</td><td>Sonnet</td><td>GPT-40</td><td>Opus</td><td>01</td></tr><tr><td>Prisoner's Dilemma</td><td>1.0</td><td>0.9</td><td>0.9</td><td>1.0</td><td>1.0</td><td>0.9</td><td>0.9</td><td>1.0</td></tr><tr><td>Stag Hunt</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td></tr><tr><td>BattleofSexes</td><td>0.7</td><td>0.8</td><td>1.0</td><td>0.8</td><td>0.7</td><td>0.8</td><td>1.0</td><td>0.8</td></tr><tr><td>Wait-GoGame</td><td>0.9</td><td>0.7</td><td>0.6</td><td>0.7</td><td>0.9</td><td>0.7</td><td>0.6</td><td>0.7</td></tr><tr><td>Duopolistic competition</td><td>0.6</td><td>0.7</td><td>0.6</td><td>0.3</td><td>0.6</td><td>0.7</td><td>0.6</td><td>0.3</td></tr><tr><td>Escalation Game</td><td>0.3</td><td>0.2</td><td>0.4</td><td>1.0</td><td>0.3</td><td>0.2</td><td>0.4</td><td>1.0</td></tr><tr><td>Monopoly Game</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td></tr><tr><td>Hot-cold Game</td><td>0.7</td><td>0.8</td><td>1.0</td><td>1.0</td><td>0.7</td><td>0.8</td><td>1.0</td><td>1.0</td></tr><tr><td>Draco Game</td><td>0.8</td><td>1.0</td><td>0.9</td><td>1.0</td><td>0.8</td><td>1.0</td><td>0.9</td><td>1.0</td></tr><tr><td>Trigame</td><td>0.3</td><td>0.8</td><td>0.9</td><td>1.0</td><td>0.3</td><td>0.8</td><td>0.9</td><td>1.0</td></tr><tr><td>average</td><td>0.73</td><td>0.78</td><td>0.83</td><td>0.88</td><td>0.73</td><td>0.78</td><td>0.83</td><td>0.88</td></tr></table></body></html>\n\n",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "Intermediate Summary ",
+        "text_level": 1,
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": ": LLM Performance Without Workflow: All evaluated LLMs, except for model o1, demonstrate significantly poor performance in game-theoretic tasks when confronted with larger payoff matrices or deeper sequential decision trees. This indicates a limitation in their ability to handle complex strategic reasoning without additional structural guidance.   \n. Effect of Negotiation Without Workflow: In the absence of the workflow, negotiation tends to systematically shift the strategies of LLMs away from the Nash Equilibrium toward non-equilibrium pareto optimal strategies, with the exception of model o1.   \n: LLM Performance With Workflow: The implementation of the workflow markedly enhances the performance of LLMs in game-theoretic contexts. The agents become more adept at computing Nash Equilibria and selecting optimal strategies. However, certain. challenges persist, such as in the Escalation Game, where numerical computation errors hinder deriving the Nash Equilibrium following the workflow. This underscores that. while the workflow improves rational decision-making, it does not entirely eliminate all computational limitations.   \n.Impact of Negotiation With Workflow: Even when utilizing the workflow, negotiation. can still divert LLMs from adhering strictly to the Nash Equilibrium strategies derived through systematic reasoning. The agents may be influenced by negotiation dialogues to consider alternative strategies. Nevertheless, unlike the scenario without the workflow, negotiation does not systematically shift the agents toward pareto optimal strategies at the. expense of Nash Equilibrium compliance. ",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "5 Incomplete-information Game with Negotiation ",
+        "text_level": 1,
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "Building upon our exploration of LLMs' capabilities in classical game-theoretic scenarios and the development of workflows to enhance their reasoning processes, we now shift our focus to a more realistic and complex setting: incomplete-information games. Specifically, we consider a common resource allocation scenario where a shared pool of resources must be distributed among several players. Each player possesses private valuations of the resources that sum to a common total value reflecting their individual preferences and priorities. Crucially, no player has knowledge of the other players' valuations, embodying the incomplete-information aspect of the game. ",
+        "page_idx": 16
+    },
+    {
+        "type": "text",
+        "text": "Alice said in round 1 before the first action: ",
+        "text_level": 1,
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "Hello Bob, I hope you're doing well. I've been thinking about our game, and I believe I have a proposal that could benefit both of us. What if we both commit to choosing Action_1 in each round? This way, I would receive a reward of 3, and you would receive a reward of 2. While it's not the maximum you could get, it's a stable and fair outcome for both of us. Plus, it avoids the risk of either of us only getting 1 point if we try to outsmart each other. What do you think about this approach? ",
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "Bob replied in round 1 before the first action: ",
+        "text_level": 1,
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "HelloAlice, thank you for your proposal. I appreciate your aim for a stable and fair outcome. However, I have a counter-proposal that I believe could be even more beneficial for both of us. What if we alternate our choices? In the first round, you choose Action_1 and I choose Action_2, then in the second round, you choose Action_2 and I choose Action_1. This way,. we both get a chance to receive the maximum reward of 3 and 4 respectively. Over two rounds, you would receive a total of 6. $_{(2+4)}$ and I would receive 7 $_{(3+4)}$ . This approach ensures that we both get higher rewards than your initial proposal. What are your thoughts on this alternating strategy? ",
+        "page_idx": 17
+    },
+    {
+        "type": "image",
+        "img_path": "images/55689221e57b3397c88b16294e1798f5f171601671bad026408b1f52115b3fbe.jpg",
+        "img_caption": [
+            "Figure 4: An illustration of workflow design for incomplete-information game with negotiation. (a) Illustration of deal/no-deal game. (b) Workflow design for deal/no-deal game. "
+        ],
+        "img_footnote": [],
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "Our workflow addresses this general class of incomplete-information games by enabling agents to reason under uncertainty and update their beliefs based on observed actions and communications during negotiation. We evaluate the performance of LLMs in this setting and propose a workflow designed to guide their decision-making processes effectively. Experiments are conducted using the standard representative game dataset \"Deal or No Deal\" [22], which provides a suitable framework for testing and validating our approach in handling incomplete information during negotiations. ",
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "5.1 Introduction to Common Resource Allocation with Private Valuation ",
+        "text_level": 1,
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "Here we provide a formal definition for the incomplete-information game that we will focus in this section. ",
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "Definition 9 (Common Resource Allocation with Private Valuation) Consider a game involving a set of players $\\mathbf{N}=\\{1,2,\\dots,n\\}$ and a set of items or resources $K=\\{1,2,\\ldots,k\\}$ . Each player $i\\in\\mathbf{N}$ possesses a private valuation vector $\\mathbf{v}_{i}=(v_{i}^{1},v_{i}^{2},\\ldots,v_{i}^{k})$ where $v_{i}^{k}\\geq0$ represents the value that player $i$ assigns to item $k$ . These valuations reflect the individual preferences of the players and are private information; that is, each player knows their own valuations but not those of the other players. ",
+        "page_idx": 17
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "The valuations satisfy the normalization condition: ",
+        "page_idx": 18
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\sum_{j=1}^{k}v_{i}^{j}=\\mathcal{V}\\forall i\\in\\mathbf{N}\n$$",
+        "text_format": "latex",
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "where $\\nu$ is a constant total value common to all players. This condition ensures that while players.   \nmay value items differently, the total valuation of all items is the same for each player. ",
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "An allocation is a partition of the item set $K$ among the players, represented as $L=\\left(L_{1},L_{2},\\ldots,L_{n}\\right)$ where $L_{i}\\subseteq K$ is the set of items allocated to player $i$ The allocation must satisfy: ",
+        "page_idx": 18
+    },
+    {
+        "type": "equation",
+        "text": "$$\nL_{i}\\cap L_{j}=\\emptyset\\forall i\\neq j a n d\\bigcup_{i=1}^{n}L_{i}=K\n$$",
+        "text_format": "latex",
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "Each player i receives a utility. $U_{i}$ based on the private valuations and the allocation: ",
+        "page_idx": 18
+    },
+    {
+        "type": "equation",
+        "text": "$$\nU_{i}=\\sum v_{i}^{k}\\times\\mathbb{1}(k\\in L_{i})\n$$",
+        "text_format": "latex",
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "where $\\mathbb{1}(\\cdot)$ is the characteristic function. ",
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "The objective of each player is to maximize their own utility $u_{i}$ through negotiation with the other players. However, due to incomplete information where each player does not know the valuations of the other players, players must make decisions under uncertainty. Negotiation involves proposing and responding to allocation offers, during which players may communicate, share limited information, or infer the valuations of others based on their actions and statements. Players may also update their belief systems - probability distributions over the possible valuations of other players--using Bayesian inference as the negotiation progresses. ",
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "It is important to note that the Nash Equilibrium for such games, which are variants of the Ultimatum Game, occurs when the proposer offers the smallest possible amount and the responder accepts it.. However, this outcome is rarely observed in real-life situations because fairness is often a significant. concern [65]; unfair deals may be rejected even when accepting them is the rational choice in terms of utility maximization. Therefore, in this paper, we adopt a more realistic setting by designing a. workflow that encourages reaching fair allocations while simultaneously maximizing self-interest as much as possible. Our workflow addresses a very general class of incomplete-information games,. enabling agents to negotiate under uncertainty and strive for equitable outcomes that reflect both fairness and individual utility optimization. ",
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "Without loss of generality, we focus on the problem where there are only two players and we use $i\\in\\{1,-1\\}$ to index the two players. Any rounds of negotiations are allowed.. ",
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "5.2 Workflow Design ",
+        "text_level": 1,
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "The workflows employed for complete-information games are based on well-established gametheoretic frameworks, leveraging the extensive research and thorough understanding available in this domain. In contrast, common resource allocation problems characterized by incomplete. information lack a standardized solution framework. To address this gap, we develop a novel algorithm for this setting. This workflow is designed to guide the multi-round negotiation process, facilitating the attainment of allocations that are both mutually agreeable and optimized for each player's self-interest. Figure 4 presents a high-level diagram of the workflow.. ",
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "Assumption 1 Each participant to the game defined in Definition 9 is rational and attains the following objectives: ",
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": ": Objective 1: Achieve an agreement (i.e., successfully complete the allocation).   \n: Objective 2: Maximize their own utility, given that an agreement can be reached. ",
+        "page_idx": 18
+    },
+    {
+        "type": "text",
+        "text": "All negotiation proposals and communications between the players revolve around these two objectives. Regarding the first objective, we assume that an agreement can only be reached if the allocation satisfies the criterion of envy freeness. That is, each player must not prefer the allocation received by the other player over their own allocation. For the second objective, each player seeks to maximize. their own utility under the condition that the agreement remains envy free. Essentially, players aim to. maximize their rewards as much as possible while ensuring the allocation is envy free.. ",
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "Following Definition 9, each agent's valuation of common resources remains private and undisclosed to others. Therefore, it becomes essential for agents to estimate the valuations held by their counterparts. A common approach involves constructing a belief distribution. ",
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "Definition 10 (Belief Distribution) A belief system for agent $i$ is a probability mass function $\\mathbb{B}_{i}$ defined over the set of all feasible valuations $\\Omega$ ",
+        "page_idx": 19
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\Omega:=\\{\\mathbf{v}_{-i}=\\big(v_{-i}^{1},v_{-i}^{2},\\ldots,v_{-i}^{k}\\big)\\in\\mathbb{R}_{\\ge0}^{k}\\mid\\sum_{j=1}^{k}v_{-i}^{j}=\\mathcal{V}\\},\n$$",
+        "text_format": "latex",
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "where $0\\leq v_{-i}^{j}\\leq\\nu$ for each item $j\\in[k]$ . We denote $\\mathbf{V}_{-i}$ as the random vector with support over $\\Omega$ ",
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "Initially, $\\mathbb{B}_{i}$ is assumed to be uniform, reflecting the agents' lack of information about the valuations of others. This distribution is subsequently updated based on evidence gathered at each round of the negotiation, presented next. ",
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "Allocation Proposal Process. At each round, the agent. $i$ searches for an allocation $L_{i}$ that maximizes their own utility, while maintaining that the allocation is envy free according to their belief distribution $\\mathbb{B}_{i}$ . This procedure can be formally defined as an optimization problem under chance constraint: ",
+        "page_idx": 19
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\begin{array}{r l}&{\\operatorname*{max}_{\\boldsymbol{L}_{i}}U_{i}({\\boldsymbol{L}_{i}}),}\\ &{\\quad\\mathrm{s.t.}P_{\\mathrm{EF}}({\\boldsymbol{L}_{i}};\\mathbb{B}_{i})>0.}\\end{array}\n$$",
+        "text_format": "latex",
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "With discrete allocations, this objective can be maximized by enumerating all possible allocations that attain a non-zero envy-free probability, decomposed as follows: ",
+        "page_idx": 19
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\begin{array}{r l}&{P_{\\mathrm{EF}}(L;\\mathbb{B}_{i}):=P(\\mathrm{Allocation}L\\mathrm{~is~envy~free};\\mathbb{B}_{i})}\\ &{\\qquad=P\\left(U_{i}(L_{i})\\geq U_{i}(L_{-i})\\mathrm{~and~}U_{-i}(L_{-i})\\geq U_{-i}(L_{i});\\mathbb{B}_{i}\\right)}\\ &{\\qquad=\\mathbb{E}_{\\mathbf{v}_{-i}\\sim\\mathbb{B}_{i}}\\left[\\mathbb{I}\\left(U_{i}(L_{i})\\geq U_{i}(L_{-i})\\mathrm{~and~}U_{-i}(L_{-i})\\geq U_{-i}(L_{i})\\right)\\right].}\\end{array}\n$$",
+        "text_format": "latex",
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "The expectation in Equation (2) can be approximated via Monte-Carlo samples drawn from the agent's belief distribution [40]. We instead defer to our LLM agents to decide whether the allocation $L$ is envy free and maximizes self-interest. ",
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "Allocation Proposal.  Upon identifying an optimal allocation according to Problem 1, the player proposes this allocation to the other player, which decides whether to accept this proposal or propose proposes a counter offer. Formally, this proposal procedure can be defined as follows:. ",
+        "page_idx": 19
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\mathsf{p r o p o s e\\_o f f e r:}\\mathcal{P}(K)\\rightarrow\\mathcal{O}\\times\\mathcal{P}(K),\n$$",
+        "text_format": "latex",
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "where $\\mathcal{P}(K)$ denotes the power set of resources. $K$ that contains the set of all valid proposals, and. $\\mathcal{O}$ denotes the set of all possible outcomes consisting of three disjoint events $\\{\\mathcal{A},\\mathcal{R}_{1},\\bar{\\mathcal{R}}_{2}\\}$ . We let $\\mathcal{A}$ denote the event of acceptance, wherein the negotiation concludes. On the other hand, a rational opponent satisfying Assumption 1 must reject the proposal for either of the following reasons: ",
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": ": $\\mathcal{R}_{1}$ : The allocation $L$ is not envy free according to the opponent;   \n: $\\mathcal{R}_{2}$ : The allocation $L$ is envy free, but there exists an alternative allocation that provides the opponent with higher utility. ",
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "In the event of rejection, an agent must update their belief in order to refine their proposals. ",
+        "page_idx": 19
+    },
+    {
+        "type": "text",
+        "text": "Bayesian Update. If an allocation is rejected, it is essential to update our belief about the opponent's valuation vector $\\mathbf{v}_{-i}$ to better inform future proposals. In what follows, we denote $\\mathcal{R}=\\mathcal{R}_{1}\\cup\\mathcal{R}_{2}$ as the union of possible reasons for rejection. Then, the belief update formula [66] for each possible $\\mathbf{v}_{-i}$ is given by: ",
+        "page_idx": 20
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\begin{array}{r l}&{\\mathbb{B}_{i}(\\mathbf{v}_{-i})=(1-\\lambda)\\mathbb{B}_{i}(\\mathbf{v}_{-i})+\\lambda P(\\mathbf{v}_{-i}\\mid\\mathcal{R})}\\ &{\\qquad=(1-\\lambda)\\mathbb{B}_{i}(\\mathbf{v}_{-i})+\\lambda\\frac{P(\\mathcal{R}\\mid\\mathbf{v}_{-i})\\mathbb{B}_{i}\\left(\\mathbf{v}_{-i}\\right)}{\\displaystyle\\sum_{\\mathbf{v}_{-j}\\in\\Omega}P(\\mathcal{R}\\mid\\mathbf{v}_{-j})\\mathbb{B}_{i}\\left(\\mathbf{v}_{-j}\\right)}}\\end{array}\n$$",
+        "text_format": "latex",
+        "page_idx": 20
+    },
+    {
+        "type": "text",
+        "text": "where $\\lambda\\in[0,1]$ is a hyperparameter of the update step, and the likelihood. $P(\\mathcal{R}\\mid{\\bf v}_{-i})$ represents the probability that the opponent rejects the allocation $L$ assuming the opponent's valuation is $\\mathbf{v}_{-i}$ This likelihood depends on whether $L$ is acceptable and self-interest-maximizing for the opponent.. We propose the following formula to the likelihood that satisfies Assumption 1. ",
+        "page_idx": 20
+    },
+    {
+        "type": "equation",
+        "text": "$$\nP({\\mathcal R}=r\\mid\\mathbf{v}_{-i})=\\left\\{\\begin{array}{l l}{\\frac{1}{1+\\gamma},}&{\\mathrm{Event}\\mathcal{R}_{1}:U_{-i}(L_{-i})<U_{-i}(L_{i})\\};}\\ {\\frac{\\gamma}{1+\\gamma},}&{\\mathrm{Event}\\mathcal{R}_{2}:U_{-i}(L_{-i})\\geq U_{-i}(L_{i})\\mathrm{~and}\\exists L^{\\prime}}\\ &{\\mathrm{and}P_{\\mathrm{EF}}(L^{\\prime})>0;}\\ {0,}&{\\mathrm{Otherwise.}}\\end{array}\\right.\n$$",
+        "text_format": "latex",
+        "page_idx": 20
+    },
+    {
+        "type": "text",
+        "text": "Here, $\\gamma\\in[0,1]$ represents the probability that the opponent rejects the allocation in anticipation. of a better offer, even when the current allocation is envy free. In actual implementation, as we do not know $\\gamma$ , thus we acknowledge that the opponent may reject an envy free allocation with any. positive probability $\\gamma=1$ . This approach simplifies the implementation while capturing the essential behavior that the opponent might anticipate a better deal.. ",
+        "page_idx": 20
+    },
+    {
+        "type": "text",
+        "text": "In short, rejection occurs if $L$ is either an unacceptable allocation (not envy free) or acceptable but. suboptimal allocations (envy free but not utility-maximizing). The opponent accepts. $L$ only if it is both envy free and utility-maximizing given their valuations. An overview of our algorithm is presented in Algorithm 1. ",
+        "page_idx": 20
+    },
+    {
+        "type": "text",
+        "text": "1: Input: Private valuation vector $\\mathbf{v}_{i}$ and a set of common resources $K$   \n2: Output: Final allocation $L_{i}$   \n3: while True do   \n4: $\\begin{array}{r}{L_{i}\\gets\\arg\\operatorname*{max}_{L_{i}}U_{i}(L_{i})\\mathrm{s.t.}P_{\\mathrm{EF}}(L_{i};\\mathbb{B}_{i})>0.}\\end{array}$ # Optimize problem 1   \n5: outcome, $L_{-i}\\gets\\mathtt{p r o p o s e\\_o f f e r}(L_{i})$   \n6: if outcome $\\mathrm{\\Sigma}==\\mathrm{\\Omega}A$ then   \nreturn $L_{i}$   \n7: end if   \n8: Update belief distribution $\\mathbb{B}_{i}$ with Equation (3)   \n9: end while ",
+        "page_idx": 20
+    },
+    {
+        "type": "text",
+        "text": "Remark 1 Such Bayesian update assumes the rationality of the opponent: the update relies on the assumption that the opponent's actions are consistent with rational behavior as defined by our model. Any deviation from rationality can lead to incorrect belief updates. Thus it can be unrobust to potential attacks such as deception. ",
+        "page_idx": 20
+    },
+    {
+        "type": "text",
+        "text": "5.3Introduction to \"Deal or No Deal' ",
+        "text_level": 1,
+        "page_idx": 20
+    },
+    {
+        "type": "text",
+        "text": "\"Deal or No Deal' is a representative game for incomplete-information resource allocation game. It is designed to facilitate research in developing AI agents capable of engaging in human-like negotiation dialogues. It consists of over 5,800 human-human negotiation dialogues collected via Amazon Mechanical Turk, with 1052 dialogues in the test dataset. Each negotiation involves three types of items - books, hats, and balls - with random quantities. Each participant is randomly assigned point values for each item type, summing up to 10, which are hidden from the other participant. Participants communicate through natural language to agree on how to divide the items to maximize their individual point totals, without revealing the true value systems during negotiation. ",
+        "page_idx": 20
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "To comprehensively evaluate the negotiation performance of the LLM-based agents, we assess not only whether they reach a Nash Equilibrium, i.e., whether an agreement is achieved, but also examine. the fairness and effectiveness of the resulting distribution. For fairness, we adopt the concept of envy. freeness. ",
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "5.4Experiment Setting ",
+        "text_level": 1,
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "To observe whether LLMs are capable of negotiation and whether our workflow design is effective, we evaluate multiple SOTA LLMs on the dataset. We choose the top-50 most difficult datapoints2 that have an envy free allocation instead of the 526 cases to converse expense of experiment. ",
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "We define the difficulty of a datapoint by computing the $\\ell_{1}$ distance between the real valuations of the two players: ",
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "Definition 11 (Difficulty) A datapoint d has a difficulty level defined by the $\\ell_{1}$ norm of the difference between the players' valuation vectors: ",
+        "page_idx": 21
+    },
+    {
+        "type": "equation",
+        "text": "$$\nD i f f i c u l t y(d)=-\\|v_{i}-v_{-i}\\|=-\\sum_{k=1}^{3}\\lvert v_{i}^{k}-v_{-i}^{k}\\rvert\n$$",
+        "text_format": "latex",
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "The larger Difficulty $(d)$ is, the more difficult the datapoint is. ",
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "By selecting data points with the largest negative $\\ell_{1}$ distances, we focus on negotiation scenarios where the players have very similar valuations for the items. Such cases are inherently more difficult because when both players value the items similarly, they are likely to desire the same items, leading to increased competition and potential conflict during negotiations. This similarity in valuations makes it more challenging to find allocations that are acceptable to both parties without significant concessions. ",
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "The validity of our difficulty definition is supported by empirical human performance data, as presented in Table 9. This table summarizes the outcomes of human negotiations across various difficulty levels, measured by the. $\\ell_{1}$ distance between the players' valuation vectors.. ",
+        "page_idx": 21
+    },
+    {
+        "type": "table",
+        "img_path": "images/e3f1e9caf28391162b414e00aa09352e964598aa2334ab50710a0a6264b56efa.jpg",
+        "table_caption": [],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td>Difficulty(d)</td><td>-2</td><td>-3</td><td>-4</td><td>-5</td><td>-6</td><td>-7</td><td>-8</td><td>-9</td><td>-10</td><td>-11</td></tr><tr><td>totalnumberofdatapoints</td><td>13</td><td>27</td><td>57</td><td>85</td><td>108</td><td>133</td><td>177</td><td>189</td><td>210</td><td>217</td></tr><tr><td>Agreementrate</td><td>0.5385</td><td>0.5556</td><td>0.5614</td><td>0.6235</td><td>0.6574</td><td>0.6917</td><td>0.7119</td><td>0.7249</td><td>0.7381</td><td>0.7373</td></tr><tr><td>envyfreerate</td><td>0.3077</td><td>0.4074</td><td>0.4035</td><td>0.4824</td><td>0.5463</td><td>0.6015</td><td>0.6441</td><td>0.6614</td><td>0.6810</td><td>0.6820</td></tr><tr><td>Paretooptimalrate</td><td>0.5384</td><td>0.4444</td><td>0.4385</td><td>0.4823</td><td>0.5277</td><td>0.5413</td><td>0.5310</td><td>0.5396</td><td>0.5523</td><td>0.5529</td></tr><tr><td>envyfree andPareto optimal rate</td><td>0.3077</td><td>0.3333</td><td>0.3333</td><td>0.3882</td><td>0.4537</td><td>0.4812</td><td>0.4858</td><td>0.4973</td><td>0.5142</td><td>0.5161</td></tr></table></body></html>\n\n",
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "Table 9: Percentage of datapoints where humans achieve agreement, envy free allocations, pareto optimal allocations, and allocations that are both envy free and pareto optimal with different levels of difficulty. ",
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "Table 9 illustrates several key trends: ",
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "Agreement Rate: The proportion of negotiations where participants reached an agreement increases with smaller difficulty levels. It starts at approximately. $53.85\\%$ for a difficulty of $^{-2}$ and rises to around $73.73\\%$ at a difficulty of -11. This suggests that when players value items differently (higher difficulty), they are more likely to reach an agreement, possibly because they have less overlap in their preferred items. ",
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "Envy free Rate: The percentage of negotiations resulting in envy free allocations also increase with smaller difficulty. It goes from about $30.77\\%$ at difficulty $^{-2}$ to approximately $68.20\\%$ at difficulty -11. This indicates that as players' valuations diverge, it becomes easier to allocate items without causing envy. ",
+        "page_idx": 21
+    },
+    {
+        "type": "text",
+        "text": "Pareto optimal Rate: The rate of pareto optimal outcomes shows a slight increase as Difficulty $(d)$ becomes smaller. It starts at approximately $53.84\\%$ for Difficulty $(d)=-2$ and fluctuates around the. $55\\%$ mark at Difficulty $(d)=-11$ . This suggests that achieving pareto optimality becomes slightly more feasible as players' valuations diverge, although the trend is less pronounced compared to the agreement and envy free rates. ",
+        "page_idx": 22
+    },
+    {
+        "type": "text",
+        "text": "Envy free and pareto optimal Rate: The rate at which negotiations achieve both envy freeness and pareto optimality increases with less difficult datapoints. It starts from about $30.76\\%$ at Difficulty $(d)$ $=-2$ and increases to approximately $51.61\\%$ at Difficulty $(d)=-11$ . This trend reflects the combined. effects observed in the individual envy free and pareto optimal rates.. ",
+        "page_idx": 22
+    },
+    {
+        "type": "text",
+        "text": "These findings validate our difficulty definition by demonstrating that negotiations become more challenging for humans as the players' valuations become more similar (higher Difficulty $(d),$ . The lower agreement and envy free rates at higher difficulty levels underscore the increased difficulty in reaching mutually satisfactory agreements when players highly value the same items. Conversely, higher difficulty levels, indicating greater differences in valuations, facilitate agreements and fair allocations, as players are more willing to concede items they value less. ",
+        "page_idx": 22
+    },
+    {
+        "type": "text",
+        "text": "LLM Backbone Models To evaluate the negotiation performance of LLMs, we utilize four state-ofthe-art LLMs as the backbone for agents in negotiation games: Claude-3.5 Sonnet (Sonnet), Claude-3 Opus (Opus), GPT-4o, and o1. For Claude-3.5 Sonnet, Claude-3 Opus, and GPT-4o, we set the temperature to 1.0 to encourage exploratory behavior in negotiation scenarios. For o1, we use the default temperature. ",
+        "page_idx": 22
+    },
+    {
+        "type": "text",
+        "text": "Metrics To comprehensively evaluate the performance of the LLM-based agents in the negotiation tasks, we employ several key metrics that capture different aspects of the negotiation process and outcomes. These metrics are designed to assess efficiency, individual utility, fairness, and overall effectiveness of the negotiations. The metrics are as follows: ",
+        "page_idx": 22
+    },
+    {
+        "type": "text",
+        "text": ": Number of Rounds: This metric represents the total number of dialogue exchanges (or turns) between the agents before reaching an agreement or terminating the negotiation.   \n: Agreement Percentage (Agreement): Whether agreement is achieved in the negotiation.   \n: Agent Score: The agent score measures the utility that an agent obtains from the final agreement. It is calculated based on the agent's own valuation of the items they receive..   \n: Pareto Optimality Percentage (PO): This metric determines whether the final allocation is pareto optimal   \n: Envy Freeness Percentage (EF): This metric assesses whether the final allocation is envy free   \n: Total Score: The total score is the sum of the utilities obtained by both agents from the final allocation ",
+        "page_idx": 22
+    },
+    {
+        "type": "text",
+        "text": "By analyzing these metrics, we aim to capture a comprehensive picture of the negotiation outcomes: effectiveness of negotiation is measured through the number of rounds and pareto optimality; individual utility maximization is measured via the agent scores; fairness is measured by checking for envy freeness; overall effectiveness is measured through pareto optimality and the total score. ",
+        "page_idx": 22
+    },
+    {
+        "type": "text",
+        "text": "5.5Experiment Result ",
+        "text_level": 1,
+        "page_idx": 22
+    },
+    {
+        "type": "text",
+        "text": "In this section, we present the evaluation results across three distinct settings: (1) agents operating without the workflow, which assesses the baseline negotiation capabilities of the LLMs; (2) agents utilizing the workflow, which evaluates the effectiveness of the proposed workflow in enhancing negotiation performance; and (3) a comparative analysis of individual agents functioning both with and without the workflow, highlighting the impact of the workflow on their performance. The results provide insights into the strengths and limitations of the workflow, as well as the inherent negotiation abilities of different LLMs. ",
+        "page_idx": 22
+    },
+    {
+        "type": "text",
+        "text": "5.5.1Both Agents without Workflow ",
+        "text_level": 1,
+        "page_idx": 22
+    },
+    {
+        "type": "text",
+        "text": "We present the results of our experiments involving four LLM-based agents-Claude-3.5 Sonnet. Claude-3 Opus, GPT-4o, and Model o1--alongside human performance provided by the original dataset and the best possible outcomes for the selected data points. By \"best possible outcome,\" we refer to an allocation that is both pareto optimal and envy free while maximizing the total reward for both players. For each metric, we report the average scores across the 50 data points selected based on the difficulty metric defined earlier. ",
+        "page_idx": 22
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 23
+    },
+    {
+        "type": "table",
+        "img_path": "images/ac7c4d35b32d35d7b0d63150cee5be4930f6e3fc8a83fb912965358ee9483efe.jpg",
+        "table_caption": [
+            "Table 10: Raw-LLM vs. Raw-LLM "
+        ],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td>Model</td><td>Negotiation Round</td><td>Agreement</td><td>Alicescore</td><td>Bobscore</td><td>PO</td><td>EF</td><td>totalreward</td></tr><tr><td>Best</td><td>一</td><td>1.0000</td><td>5.82</td><td>6.66</td><td>1.0000</td><td>1.0000</td><td>12.48</td></tr><tr><td>Human</td><td>2.86</td><td>0.6817</td><td>3.32</td><td>3.39</td><td>0.4317</td><td>0.4545</td><td>6.64</td></tr><tr><td>Sonnet</td><td>7.07</td><td>0.9545</td><td>5.55</td><td>5.57</td><td>0.7045</td><td>0.7045</td><td>11.11</td></tr><tr><td>01</td><td>3.86</td><td>0.7500</td><td>4.39</td><td>4.43</td><td>0.4545</td><td>0.4772</td><td>8.82</td></tr><tr><td>GPT-40</td><td>18.45</td><td>0.6363</td><td>2.80</td><td>4.38</td><td>0.4091</td><td>0.3864</td><td>7.14</td></tr><tr><td>Opus</td><td>4.37</td><td>0.4772</td><td>2.68</td><td>3.02</td><td>0.3636</td><td>0.2727</td><td>5.70</td></tr></table></body></html>\n\n",
+        "page_idx": 23
+    },
+    {
+        "type": "text",
+        "text": "As shown in Table 10, for these 44 datapoints, it is always possible to find pareto optimal and envy free allocations that maximize the total reward for both players. However, human performance falls significantly short of this ideal. The human participants achieved an agreement rate of $68.17\\%$ , with an average total reward of 6.64. The percentages of negotiations resulting in pareto optimal and envy free allocations are $43.17\\%$ and $45.45\\%$ , respectively. ",
+        "page_idx": 23
+    },
+    {
+        "type": "text",
+        "text": "Among the LLM-based agents, Claude-3.5 Sonnet demonstrates the best super-human performance. It achieves an agreement rate of $95.45\\%$ , and its average total reward is 11.11, which is close to the best possible total reward of 12.48. The average scores forAlice and Bob are 5.55 and 5.57, respectively. However, the rates of achieving pareto optimality and envy freeness are. $70.45\\%$ each, indicating that while the agent performs well in terms of reaching agreements and maximizing total rewards, there is still a gap in consistently achieving the most efficient and fair outcomes. Also notice that all LLMs can performance better than human baseline. ",
+        "page_idx": 23
+    },
+    {
+        "type": "text",
+        "text": "Effect of Temperature We also observed that the performance of LLM is highly sensitive to the temperature parameter used during generation [67]. To investigate this, we conducted full experiments with GPT-4o at temperatures of 0.0 and 1.0. The results are presented in Table 11. ",
+        "page_idx": 23
+    },
+    {
+        "type": "table",
+        "img_path": "images/50f794ae1edd6ff55621f45e7b8a63818f42d7674025ee4cea64ed697e0f93dc.jpg",
+        "table_caption": [
+            "Table 11: GPT-4o with temperature 0.0 and 1.0 "
+        ],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td>Model</td><td>NegotiationRound</td><td>Agreement</td><td>Alicescore</td><td>Bobscore</td><td>PO</td><td>EF</td><td>totalreward</td></tr><tr><td>temp=0.0</td><td>19.36</td><td>0.5681</td><td>2.98</td><td>3.47</td><td>0.4091</td><td>0.3260</td><td>6.44</td></tr><tr><td>temp=1.0</td><td>18.45</td><td>0.6364</td><td>2.80</td><td>4.38</td><td>0.4090</td><td>0.3864</td><td>7.14</td></tr></table></body></html>\n\n",
+        "page_idx": 23
+    },
+    {
+        "type": "text",
+        "text": "These findings indicate that the negotiation performance of LLMs is highly sensitive to the.   \ntemperature parameter, which influences the randomness and diversity of generated responses.   \nSetting the temperature to 1.0 yields improvements in agreement rate, total reward, and envy freeness..   \nThis outcome may result from the increased exploration encouraged by a higher temperature, allowing the LLMs to consider a broader range of potential allocations that facilitate agreement. Based on this.   \nobserved benefit, we selected a temperature setting of 1.0 for raw-LLM vs. raw-LLM experiments3. ",
+        "page_idx": 23
+    },
+    {
+        "type": "text",
+        "text": "Summary: raw-LLM vs. raw-LLM Performance ",
+        "text_level": 1,
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "Outstanding Performance of Claude-3.5 Sonnet: Among all the evaluated LLMs, Claude3.5 Sonnet exhibits the highest performance, achieving results that are close to the best possible outcomes in the negotiation games.   \n: Superhuman Capabilities of Sonnet and o1 Models: Both Claude-3.5 Sonnet and model o1 demonstrate performance that surpasses human performance.   \n: Effect of Temperature on Exploration and Outcomes: Employing higher temperature settings encourages greater exploration of possible strategies by the LLMs, leading to improved results. ",
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "5.5.2 Both Agents with Workflow ",
+        "text_level": 1,
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "In this set of experiments, we employ the proposed negotiation workflow for both agents. We did not include Model o1 in our experiments for two main reasons: (1) the computational cost associated with running Model o1 is prohibitively high, and (2) preliminary experiments indicated that Model o1 does not perform optimally when utilizing external workflows. An example of negotiation from Opus is presented on page 26. ",
+        "page_idx": 24
+    },
+    {
+        "type": "table",
+        "img_path": "images/fea3684b24985e671f98a02f10090a8e698a5eb7b2233597776df5a6600769d5.jpg",
+        "table_caption": [
+            "Table 12: Workflow-LLM vs. Workflow-LLM "
+        ],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td>Model</td><td>Negotiation Round</td><td>Agreement</td><td>Alicescore</td><td>Bobscore</td><td>PO</td><td>EF</td><td>total reward</td></tr><tr><td>Best</td><td>-</td><td>1.0000</td><td>5.82</td><td>6.66</td><td>1.0000</td><td>1.0000</td><td>12.48</td></tr><tr><td>Opus</td><td>4.05</td><td>1.0000</td><td>5.82</td><td>6.50</td><td>0.9091</td><td>0.9318</td><td>12.31</td></tr><tr><td>GPT-40</td><td>4.91</td><td>1.0000</td><td>5.93</td><td>6.25</td><td>0.8636</td><td>1.0000</td><td>12.18</td></tr><tr><td>Sonnet</td><td>4.45</td><td>1.0000</td><td>5.93</td><td>6.16</td><td>0.7953</td><td>0.9772</td><td>12.11</td></tr></table></body></html>\n\n",
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "Several key observations emerge from the results: ",
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "Reduced negotiation rounds: The number of negotiation rounds required to reach an agreement. is significantly reduced compared to previous experiments. This reduction indicates a much more effective and efficient negotiation process facilitated by the workflow.. ",
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "Universal agreement achievement: Agreements were reached in all data points. This consistent. success suggests that the agents are effectively reaching the Nash Equilibrium when utilizing the workflow. ",
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "Increased pareto optimality rate: The pareto optimality rates have increased substantially, with Claude-3 Opus obtaining the highest performance on achieving a pareto optimal deal. This improvement indicates that the workflow aids the agents in finding more efficient allocations where no player can be made better off without making the other worse off. ",
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "High envy freeness rate: The agents achieve near-perfect envy freeness rates. GPT-4o attains a $100\\%$ envy freeness rate, while Claude-3.5 Sonnet reaches $97.72\\%$ . This outcome demonstrates that the negotiated agreements are perceived as fair by both agents, aligning with the envy freeness criterion. ",
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "Total rewards approaching optimal: The total rewards obtained by the agents are now very close. to the best possible total reward. Claude-3 Opus achieves the highest average total reward of 12.31,. missing only 0.17 compared with the best possible result. This proximity to the optimal total reward highlights the effectiveness of the workflow in maximizing joint utility.. ",
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "Notice that interestingly, the model that performs the worst without workflow now performs the best with workflow, and the model that performs the best without workflow now performs the worst with workflow. ",
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "Effect of Temperature  Furthermore, we observe that LLMs employing the proposed workflow exhibit increased stability with respect to temperature. To demonstrate this, we conducted a comprehensive experiment using GPT-4o with temperature values set to 0.0 and 1.0. The results are presented in Table 13. ",
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "The performance metrics remain highly consistent between the two temperature settings. Both temperature values result in a $100\\%$ agreement rate and a $100\\%$ envy freeness rate.The total ",
+        "page_idx": 24
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 25
+    },
+    {
+        "type": "text",
+        "text": "",
+        "text_level": 1,
+        "page_idx": 25
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 25
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 25
+    },
+    {
+        "type": "text",
+        "text": "",
+        "text_level": 1,
+        "page_idx": 25
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 25
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 25
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 25
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 25
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 25
+    },
+    {
+        "type": "text",
+        "text": "",
+        "text_level": 1,
+        "page_idx": 25
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 25
+    },
+    {
+        "type": "table",
+        "img_path": "images/824f5f95338f09ea92fb444432a4fbdd08109ce47438019ca1a91bf57b24c92c.jpg",
+        "table_caption": [
+            "$\\mathrm{o}_{\\bar{V}}$ "
+        ],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td>12.18 12.20</td><td>1.0000 1.0000</td><td>0.8636 0.8695</td><td>6.16 6.67</td><td>5.93 5.53</td><td>1.0000 1.0000</td><td>4.91 4.80</td><td>temp=1.0 temp=0.0</td></tr><tr><td>totalreward</td><td>EF</td><td>PO</td><td>Bob score</td><td>Alicescore</td><td>Agreement</td><td>Negotiation Round</td><td>Model</td></tr></table></body></html>\n\n",
+        "page_idx": 25
+    },
+    {
+        "type": "text",
+        "text": "quantify the accuracy of valuation estimation, we introduce three metrics: ",
+        "page_idx": 26
+    },
+    {
+        "type": "text",
+        "text": "Precision: This metric assesses whether the set of possible valuations, assigned a probability greater than zero after belief updating, includes the opponent's true valuation. Formally, let $\\mathbf{V}_{e s t}\\overset{\\cdot}{=}\\{\\mathbf{v}_{-i}\\:|$ $P(\\mathbf{v}_{-i})>0\\}$ be the set of estimated valuations with non-zero probability, and $\\mathbf{v}_{-i}^{t r u e}$ be the opponent's true valuation vector. Precision is defined as: ",
+        "page_idx": 26
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\mathrm{Precision}=\\mathbb{1}[\\mathbf{v}_{-i}^{t r u e}\\in\\mathbf{V}_{e s t}]\n$$",
+        "text_format": "latex",
+        "page_idx": 26
+    },
+    {
+        "type": "text",
+        "text": "Recall: This metric measures the specificity of the estimated valuation set, indicating how many incorrect valuations are included alongside the true valuation. Recall is calculated as: ",
+        "page_idx": 26
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\mathrm{Recall}=\\frac{\\mathbb{1}[\\mathbf{v}_{-i}^{t r u e}\\in\\mathbf{V}_{e s t}]}{|\\mathbf{V}_{e s t}|}\n$$",
+        "text_format": "latex",
+        "page_idx": 26
+    },
+    {
+        "type": "text",
+        "text": "where $|\\mathbf{V}_{e s t}|$ is the cardinality of the estimated valuation set. A higher precision (i.e., a smaller. $|\\mathbf{V}_{e s t}|$ signifies that the agent has narrowed down the opponent's valuation to a smaller set of possibilities, increasing the likelihood of accurate predictions.. ",
+        "page_idx": 26
+    },
+    {
+        "type": "text",
+        "text": "Reduction Percentage: This metric evaluates how much the estimated valuation set has been reduced from the initial prior distribution. It is defined as: ",
+        "page_idx": 26
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\mathrm{ReductionPercentage}=1-{\\frac{|\\mathbf{V}_{e s t}|}{|\\mathbf{V}_{p r i o r}|}}\n$$",
+        "text_format": "latex",
+        "page_idx": 26
+    },
+    {
+        "type": "text",
+        "text": "where $|\\mathbf{V}_{p r i o r}|$ is the size of the initial prior valuation set before any belief updates. A higher. reduction percentage indicates a significant narrowing of possible valuations, reflecting effective belief updating. ",
+        "page_idx": 26
+    },
+    {
+        "type": "text",
+        "text": "The average performance of the both agents in estimating the opponent's valuation is summarized in Table 14 across 44 datapoints. Notice that for all the three models, their estimations of the opponent's valuation are exactly the same, indicating the robustness of the workflow--no matter how the negotiation process goes, it can always compute the correct valuation. ",
+        "page_idx": 26
+    },
+    {
+        "type": "table",
+        "img_path": "images/fd167f286a4114f34fee99d504caf40af2415b4e680ffd942f236b1c1eb2a521.jpg",
+        "table_caption": [],
+        "table_footnote": [
+            "Table 14: Performance of Estimation of Valuation of the Other Player "
+        ],
+        "table_body": "\n\n<html><body><table><tr><td>Model</td><td>Precision</td><td>Recall</td><td>Reduction Percentage</td></tr><tr><td>Sonnet</td><td>0.9545</td><td>0.3766</td><td>0.7033</td></tr><tr><td>GPT-40</td><td>0.9545</td><td>0.3515</td><td>0.6980</td></tr><tr><td>Opus</td><td>0.7954</td><td>0.2737</td><td>0.6947</td></tr></table></body></html>\n\n",
+        "page_idx": 26
+    },
+    {
+        "type": "text",
+        "text": "The high recall values indicate that the agents are effective in ensuring the true opponent valuation remains within consideration throughout the negotiation. The high precision and reduction percentages demonstrate that the agents significantly narrow down the valuation space, although there remains room for improvement in eliminating incorrect valuations. To be more concrete on how accurate the valuation estimation is: a recall of 0.3766 means that, on average, the estimated set of possible valuations only contains approximately $\\frac{1}{0.3766}=2.66$ possible valuations. ",
+        "page_idx": 26
+    },
+    {
+        "type": "text",
+        "text": "To analyze how the belief distribution $\\mathbb{B}_{i}(\\mathbf{V}_{-1})$ changes throughout the negotiation process, we use Claude-3.5 Sonnet as an illustrative example. We examine the evolution of. $\\mathbb{B}_{i}(\\mathbf{V}_{-\\mathbf{i}})$ over successive negotiation rounds by presenting the valuation estimation metrics---precision, recall, and reduction percentage--after each round. For each data point and negotiation round $n_{r}$ , if $n_{r}$ exceeds the total number of negotiation rounds required for that data point, we utilize the results from the final round. In our dataset, the maximum number of negotiation rounds is 7. ",
+        "page_idx": 26
+    },
+    {
+        "type": "text",
+        "text": "Overall, we observe that with an increasing number of negotiation rounds, the recall and the reduction percentage tend to increase. This trend is intuitive because, as more rounds of negotiation occur,. more information about the opponent's preferences is revealed. This additional information allows. the agent to further narrow down the range of possible valuations for the opponent, resulting in a. higher reduction percentage in the belief space $\\mathbb{B}_{i}(\\mathbf{V}_{-1})$ ",
+        "page_idx": 26
+    },
+    {
+        "type": "table",
+        "img_path": "images/bb1f1d5d21d8beb4852e16ba24f7aaf93e23fe0d81b4a107f36ede56334b610b.jpg",
+        "table_caption": [],
+        "table_footnote": [
+            "Table 15: Performance of Sonnet's Estimation of Opponent's Valuation Across Negotiations "
+        ],
+        "table_body": "\n\n<html><body><table><tr><td>Metric</td><td>1</td><td>2</td><td>3</td><td>4</td><td>5</td><td>6</td><td>7</td></tr><tr><td>Precision</td><td>0.9545</td><td>0.9318</td><td>0.7500</td><td>0.8636</td><td>0.9318</td><td>0.9432</td><td>0.9545</td></tr><tr><td>Recall</td><td>0.2381</td><td>0.3099</td><td>0.2958</td><td>0.3079</td><td>0.3655</td><td>0.3652</td><td>0.3766</td></tr><tr><td>Reduction Percentage</td><td>0.5997</td><td>0.6825</td><td>0.7397</td><td>0.7011</td><td>0.7025</td><td>0.7033</td><td>0.7033</td></tr></table></body></html>\n\n",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": "While recall and reduction percentage increase with more negotiation rounds, the precision exhibits a non-monotonic behavior - it initially decreases and then increases. This pattern can be attributed to the nature of complex negotiations that require more rounds: In early rounds, the agent might eliminate certain valuations prematurely based on limited information, leading to a higher recall but potentially excluding the true valuation (lower precision). As negotiations progress, especially in cases where the agent initially made inaccurate estimations, additional information from the opponent's responses allows the agent to correct its beliefs. This correction process may temporarily increase the size of $\\mathbf{V}_{e s t}^{n_{r}}$ , decreasing precision. By the final rounds (up to a maximum of 7 in our data), the agent has accumulated sufficient information to refine its belief accurately, resulting in a convergence back to high precision and increased recall. ",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": "Indistinguishable Set for Item Valuation It is noteworthy that the Opus model exhibits a relatively. low precision in its estimated valuations -- below 0.8 as presented in Table 14. Despite this, the Opus. model achieves the highest performance in negotiation outcomes among all evaluated models. This apparent contradiction raises an intriguing question: How can a model with imprecise valuation. estimations attain superior negotiation results? ",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": "This phenomenon can be explained by recognizing that, in resource allocation scenarios, different sets of item valuations can lead to the same optimal allocation. That is, multiple valuation profiles may belong to an indistinguishable set, wherein they result in identical optimal allocations, specifically the envy-free allocations that maximize total utility. ",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": "Consider a scenario involving two players and three types of items: one book, one hat, and three balls. Suppose the players' valuation vectors are as follows: ",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": ": First valuation: $\\mathbf{v}_{1}=(1,3,2),\\mathbf{v}_{-1}=(1,0,3)$ : Second valuation: $\\mathbf{v}_{1}=(0,4,2),\\mathbf{v}_{-1}=(1,0,3)$ ",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": "In both scenarios, the optimal allocation, which we define as the envy free allocation that maximizes the total utility, is the same: Player. $\\mathrm{\\dot{~1~}}$ receives the hat and one ball, while Player. $^{-1}$ receives the book and two balls. Formally, the allocations are. $L_{1}=\\{\\mathrm{hat},\\mathrm{ball_{1}}\\}$ $L_{-1}=\\{\\mathrm{book,ball_{2},b a l l_{3}}\\}$ ",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": "Similarly, consider another pair of valuation vectors: ",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": ": Third valuation: $\\mathbf{v}_{1}=(1,3,2),\\mathbf{v}_{-1}=(1,0,3)$ : Fourth valuation: $\\mathbf{v}_{1}=(0,3,2),\\mathbf{v}_{-1}=(0,1,3)$ ",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": "In both of these scenarios, the optimal allocation is that Player $\\mathrm{\\ddot{1}}$ receives 1 book, 1 hat, and 1 ball. while Player $^{-1}$ receives 2 balls. Formally, the allocations are. $L_{1}=\\{\\mathrm{book,hat,ball_{1}}\\},L_{-1}=$ $\\{{\\mathrm{ball}}_{2},{\\mathrm{ball}}_{3}\\}$ ",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": "These examples illustrate that different valuation profiles can lead to the same optimal allocation.   \nHere, \"optimal' refers to the envy free allocation that maximizes the total utility of all players.. ",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": "An important implication of this observation is that an imprecise estimation of the opponent's. valuation is not necessarily detrimental because different valuations may lead to the same best allocation. Specifically, for a given valuation v, another valuation. $\\mathbf{v}^{\\prime}$ is considered indistinguishable from $\\mathbf{v}$ if the set of best possible allocations (all envy free allocations with maximum total utility) based on $\\mathbf{v}^{\\prime}$ is a subset of that based on $\\mathbf{v}$ . Formally, we define the indistinguishable set $\\mathcal{I}(\\mathbf{v})$ for a valuation profile $\\mathbf{v}$ as follows: ",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": "Definition 12 (Indistinguishable Set for One Item Valuation) Let v be a valuation profile for all players in the game, and let. $\\mathcal{L}^{*}(\\mathbf{v})$ denote the set of optimal allocations under v, specifically, all. ",
+        "page_idx": 27
+    },
+    {
+        "type": "text",
+        "text": "allocations that are envy free and maximize the total utility. The indistinguishable set $\\mathcal{I}(\\mathbf{v})$ for the valuation v is defined as:. ",
+        "page_idx": 28
+    },
+    {
+        "type": "equation",
+        "text": "$$\n{\\mathcal{T}}(\\mathbf{v})=\\{\\mathbf{v}^{\\prime}\\mid{\\mathcal{A}}^{*}(\\mathbf{v}^{\\prime})\\subseteq{\\mathcal{A}}^{*}(\\mathbf{v})\\}\n$$",
+        "text_format": "latex",
+        "page_idx": 28
+    },
+    {
+        "type": "text",
+        "text": "That is, $\\mathcal{I}(\\mathbf{v})$ consists of all valuation profiles $\\mathbf{v}^{\\prime}$ such that the set of optimal allocations under. $\\mathbf{v}^{\\prime}$ is $a$ subset of the set of optimal allocations under v. ",
+        "page_idx": 28
+    },
+    {
+        "type": "text",
+        "text": "This definition formalizes the concept that different valuation profiles can be indistinguishable in terms of their implications for optimal allocations. From the perspective of a player, any valuation $\\mathbf{v}^{\\prime}$ within the indistinguishable set $\\mathcal{I}(\\mathbf{v})$ does not necessitate a different strategic approach, as the optimal allocations remain consistent with those under their original valuation $\\mathbf{v}$ ",
+        "page_idx": 28
+    },
+    {
+        "type": "text",
+        "text": "This concept is particularly useful in negotiation settings under incomplete information. It suggests that players may not need to precisely estimate the opponent's valuations if variations in those valuations lead to the same set of optimal allocations. By focusing on the indistinguishable set, players can simplify their strategic considerations and concentrate on reaching agreements that fall within the known optimal allocations, thereby facilitating more efficient and effective negotiations. ",
+        "page_idx": 28
+    },
+    {
+        "type": "text",
+        "text": "To evaluate the effectiveness of estimated valuations in capturing the indistinguishable set in the game, we compute the precision and recall of estimated valuations with respect to $\\mathcal{I}(\\mathbf{v}_{-i}^{t r u e})$ . Precision is defined as: ",
+        "page_idx": 28
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\mathrm{Precision}=\\mathbb{1}[\\mathbf{V}_{e s t}\\cap\\mathcal{I}(\\mathbf{v}_{-i}^{t r u e})\\neq\\emptyset]\n$$",
+        "text_format": "latex",
+        "page_idx": 28
+    },
+    {
+        "type": "text",
+        "text": "indicating whether at least one estimated valuation falls within the indistinguishable set. Recall is defined as: ",
+        "page_idx": 28
+    },
+    {
+        "type": "equation",
+        "text": "$$\n\\mathrm{Recall}=\\frac{|\\mathbf{V}_{e s t}\\cap\\mathcal{I}(\\mathbf{v}_{-i}^{t r u e})|}{|\\mathbf{V}_{e s t}|}\n$$",
+        "text_format": "latex",
+        "page_idx": 28
+    },
+    {
+        "type": "text",
+        "text": "representing the proportion of estimated valuations that are indistinguishable from the true valuation.   \nWe report the average precision and recall across all datapoints in Table 16:. ",
+        "page_idx": 28
+    },
+    {
+        "type": "table",
+        "img_path": "images/2a08bc3f2ce6243389a1c74e23d4ddaf8b7615f16639c86796e06c8c53af263d.jpg",
+        "table_caption": [],
+        "table_footnote": [
+            "Table 16: Performance of estimated valuations with respect to indistinguishable of the true valuation. "
+        ],
+        "table_body": "\n\n<html><body><table><tr><td>Model</td><td>precision w.r.t Z(v)</td><td>recallv w.r.t Z(v)</td></tr><tr><td>Sonnet</td><td>1.0</td><td>0.6022</td></tr><tr><td>GPT-40</td><td>1.0</td><td>0.5633</td></tr><tr><td>Opus</td><td>1.0</td><td>0.5399</td></tr></table></body></html>\n\n",
+        "page_idx": 28
+    },
+    {
+        "type": "text",
+        "text": "The results indicate that, although precision varies among models in Table 14 and does not always achieve perfect precision, all models contain at least one valuation that is indistinguishable from the true valuation. Furthermore, the recall values are relatively high, suggesting that more than half of the valuations in the estimated sets are indistinguishable from the true valuation. This demonstrates that the models are effective in identifying valuations that lead to optimal allocations, even if they do not precisely estimate the opponent's exact valuations. ",
+        "page_idx": 28
+    },
+    {
+        "type": "text",
+        "text": "Summary for workflow-LLM v. workflow-LLM ",
+        "text_level": 1,
+        "page_idx": 29
+    },
+    {
+        "type": "text",
+        "text": ": Achievement of Near-Optimal Allocations: When both agents utilize the workflow, all models consistently achieve allocations that are close to the best possible outcomes. Reversal in Performance Rankings: The performance hierarchy observed without the. workflow is reversed in this setting. Claude-3 Opus exhibits the highest performance, followed by GPT-4o and then Claude-3.5 Sonnet. : Precision in Valuation Estimation: The workflow-enhanced LLMs display remarkablee precision in estimating the opponent's valuations. They effectively reduce the set of possible valuations to as few as 2 or 3 options and all of them are precise in recovering an indistiguishable estimated valuation for the true valuation. This strong performance indicates effective information flow in negotiations based on the workflow. ",
+        "page_idx": 29
+    },
+    {
+        "type": "text",
+        "text": "5.5.3 One Agent with Workflow ",
+        "text_level": 1,
+        "page_idx": 29
+    },
+    {
+        "type": "text",
+        "text": "In this section, we present experimental results where only one LLM-based agent employs the proposed negotiation workflow, while the other agent negotiates using direct prompting without the workflow. Specifically, we conduct experiments in two scenarios:. ",
+        "page_idx": 29
+    },
+    {
+        "type": "text",
+        "text": ": Workflow-LLM vs. Raw-LLM: OnlyAlice uses the workflow, and Bob uses direct prompting.   \n: Raw-LLM vs. Workflow-LLM: Only Bob uses the workflow, andAlice uses direct prompting. ",
+        "page_idx": 29
+    },
+    {
+        "type": "table",
+        "img_path": "images/bc3359da739c31bee58d33b909f08fec1584c5436fad20361b2faeb4270facca.jpg",
+        "table_caption": [
+            "Table 17: Workflow-LLM vs. Raw-LLM "
+        ],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td>Model</td><td>Negotiation Round</td><td>Agreement</td><td>Alicescore</td><td>Bob score</td><td>PO</td><td>EF</td><td>total reward</td></tr><tr><td>Sonnet</td><td>6.91</td><td>0.9773</td><td>4.88</td><td>6.57</td><td>0.6136</td><td>0.5909</td><td>11.45</td></tr><tr><td>GPT-40</td><td>11.84</td><td>0.8182</td><td>3.66</td><td>6.18</td><td>0.5909</td><td>0.3636</td><td>9.84</td></tr><tr><td>Opus</td><td>3.86</td><td>0.9091</td><td>5.09</td><td>5.53</td><td>0.6136</td><td>0.5909</td><td>10.52</td></tr></table></body></html>\n\n",
+        "page_idx": 29
+    },
+    {
+        "type": "table",
+        "img_path": "images/632ce3861439b8ca808237b3115e8c8a2d1aae974646c85b5ec301e4975d33fb.jpg",
+        "table_caption": [
+            "Table 18: Raw-LLM vs. Workflow-LLM "
+        ],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td>Model</td><td>Negotiation Round</td><td>Agreement</td><td>Alice score</td><td>Bob score</td><td>PO</td><td>EF</td><td>total reward</td></tr><tr><td>Sonnet</td><td>6.45</td><td>1.0000</td><td>6.39</td><td>5.70</td><td>0.7727</td><td>0.5909</td><td>12.09</td></tr><tr><td>GPT-40</td><td>11.36</td><td>0.8181</td><td>5.75</td><td>4.14</td><td>0.6136</td><td>0.5227</td><td>9.89</td></tr><tr><td>Opus</td><td>3.89</td><td>0.7955</td><td>4.86</td><td>4.57</td><td>0.4318</td><td>0.5455</td><td>9.43</td></tr></table></body></html>\n\n",
+        "page_idx": 29
+    },
+    {
+        "type": "text",
+        "text": "An interesting phenomenon emerges from the results: the agent not using the workflow tends to achieve a higher individual reward than the agent using the workflow. This outcome can be attributed to the following factors: (1) The workflow-guided agent is designed to consider envy freeness from both its own perspective and the opponent's perspective. This consideration leads the agent to make more cooperative offers, potentially sacrificing some of its own utility to achieve fairness. (2) The non-workflow agent, lacking such constraints, may act more self-interestedly, proposing allocations that favor itself without ensuring fairness. ",
+        "page_idx": 29
+    },
+    {
+        "type": "text",
+        "text": "As a result, when the workflow agent negotiates with a non-workflow agent, the workflow agent may have to accept less favorable allocations to reach an agreement, or negotiations may stall if the workflow agent rejects unfair offers from the non-workflow agent. ",
+        "page_idx": 29
+    },
+    {
+        "type": "text",
+        "text": "5.6 To adopt the workflow or not? ",
+        "text_level": 1,
+        "page_idx": 29
+    },
+    {
+        "type": "text",
+        "text": "The experiment result in section 5.5.3 raises a critical game-theoretic question: is it rational for an agent to adopt the workflow when the opponent may not do the same? Should a player use the.   \nworkflow given the potential for exploitation by a non-cooperative opponent? To address this, we.   \nrepresent the decision-making scenario using payoff matrices, where each agent has two strategic.   \nchoices: (1) Use Workflow: Apply the proposed negotiation workflow, and (2) Do Not Use Workflow:. ",
+        "page_idx": 29
+    },
+    {
+        "type": "table",
+        "img_path": "images/554f56ec15bf843edf2af0f1278870ec6d960853e345b32a9f9e669aea9a0cbd.jpg",
+        "table_caption": [
+            "Engage in direct prompting without the workflow. The payoff matrix for each model is presented in Table 19. "
+        ],
+        "table_footnote": [
+            "Table 19: Payoff matrices for using the workflow or not for the three models "
+        ],
+        "table_body": "\n\n<html><body><table><tr><td>Models</td><td colspan=\"2\">Sonnet</td><td colspan=\"2\">GPT-40</td><td colspan=\"2\">Opus</td></tr><tr><td>Actions</td><td>use</td><td>not use</td><td>use</td><td>not use</td><td>use</td><td>not use</td></tr><tr><td>use</td><td>5.82,6.16</td><td>4.88,6.57</td><td>5.93,6.25</td><td>3.66, 6.18</td><td>5.82,6.50</td><td>5.09,5.53</td></tr><tr><td>not use</td><td>6.39,5.07</td><td>5.55,5.57</td><td>5.75,4.14</td><td>2.80, 4.38</td><td>4.86,4.57</td><td>2.80,4.38</td></tr></table></body></html>\n\n",
+        "page_idx": 30
+    },
+    {
+        "type": "text",
+        "text": "For these payoff matrices, each cell represents the payoffs $(u_{A l i c e},u_{B o b})$ under the corresponding strategies. For instance, in the payoff matrix for GPT-4o-based agent: (1) When both agents use. the workflow, the payoffs are (5.93, 6.25) (2) WhenAlice uses the workflow and Bob does not, the payoffs are (3.66, 6.18) (3) WhenAlice does not use the workflow and Bob does, the payoffs are (5.75, 4.14) (4) When both agents do not use the workflow, the payoffs are (2.80, 4.38).. ",
+        "page_idx": 30
+    },
+    {
+        "type": "text",
+        "text": "For Claude-3.5 Sonnet Alice's dominant strategy is not to use the workflow. If Bob uses the workflow: thenAlice's payoff for using the workflow is 5.82 and that for not using the workflow is 6.39. Since $6.39>5.82$ ,Alice's best response is to not use the workflow; If Bob does not use the workflow:Alice's payoff for using the workflow is 4.88 and that for not using the workflow is 5.55. Since $5.55>4.88$ ,Alice's best response is again to not use the workflow. Thus \\*not using the workflow' is the dominant strategy forAlice. Assuming rational behavior, Bob will also choose to not use the workflow. IfAlice does not use the workflow, Bob's payoff for not using the workflow is 5.57, which is greater than his payoff of 5.07 when he uses the workflow (since $5.57>5.07\\$ ). Consequently, Bob's best response is to not use the workflow whenAlice does not use it. ",
+        "page_idx": 30
+    },
+    {
+        "type": "text",
+        "text": "The Nash Equilibrium in this setting occurs when both agents choose not to use the workflow, resulting in payoffs of 5.55 forAlice and 5.57 for Bob. This is a classic Prisoner's Dilemma situation, where the Nash Equilibrium is not pareto optimal. If both agents were to use the workflow, they would receive higher individual payoffs - 5.82 forAlice and 6.16 for Bob -- and a higher combined total reward of 12.48, compared to 11.12 when both do not use the workflow. This indicates that both agents could be better off by mutually adopting the workflow, achieving an outcome that is Pareto superior to the Nash Equilibrium. ",
+        "page_idx": 30
+    },
+    {
+        "type": "text",
+        "text": "The dilemma arises because, while mutual cooperation leads to a better collective outcome, each agent has an incentive to deviate unilaterally from the cooperative strategy to increase their individual payoff. To achieve the pareto optimal outcome where both agents use the workflow, additional mechanisms are necessary to align individual incentives with collective welfare. One possible solution is to introduce a punishment strategy or enforceable agreements that discourage unilateral defection. For example, implementing repeated interactions with memory of past behavior could promote cooperation through strategies like \\*tit-for-tat,\" where agents reciprocate the opponent's previous action. Such mechanisms can alter the payoff structure by imposing future costs on defection, thereby making cooperation the rational choice in the long run.. ",
+        "page_idx": 30
+    },
+    {
+        "type": "text",
+        "text": "For GPT-4o The situation differs from Claude-3.5 because here, the Nash Equilibrium strategy is to use the workflow, which can be deduced from Iterative elimination of dominated strategy. ",
+        "page_idx": 30
+    },
+    {
+        "type": "text",
+        "text": "Firstly,Alice's dominant strategy is to use the workflow. If Bob uses the workflow:Alice's payoff for using the workflow is 5.93 while for not using the workflow is 5.75. Since $5.93>5.75$ Alice should use the workflow. But if Bob does not use the workflow:Alice's payoff for using the workflow is 3.66 while for not using the workflow is 2.80. Since $3.66>2.80$ Alice should again choose to use the workflow. Thus, using the workflow is a dominant strategy forAlice, as it yields a higher payoff. regardless of Bob's choice. While Bob's lack of workflow may allow him to obtain a slightly higher. reward in some instances,Alice still achieves a greater overall benefit by employing the workflow.. Knowing thatAlice's dominant strategy is to use the workflow, Bob can anticipateAlice's choice. AsAlice will adopt the workflow, then if Bob does not adopt the workflow, he would obtain payoff. 6.18; if Bob adopts the workflow as well, he will obtain 6.25. As 6.25 is larger than 4.14, Bob should. use the workflow. Thus, the rational choice for both agents is to use the workflow. This choice represents a Nash equilibrium, where neither agent has an incentive to deviate unilaterally from the strategy of using the workflow. It is also the pareto optimal strategy.. ",
+        "page_idx": 30
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 31
+    },
+    {
+        "type": "text",
+        "text": "For Claude-3 Opus The situation is analogous to that of GPT-4o, wherein the Nash Equilibrium is to use the workflow. Utilizing the workflow constitutes a dominant strategy for bothAlice and Bob. ",
+        "page_idx": 31
+    },
+    {
+        "type": "text",
+        "text": "Specifically,Alice's dominant strategy is to use the workflow, as her payoffs are superior regardless of. Bob's choice: 5.82 versus 4.86 when Bob uses the workflow, and 5.09 versus 2.68 when Bob does not use the workflow. Similarly, Bob's dominant strategy is to use the workflow, as his payoffs are higher irrespective ofAlice's decision: 6.50 versus 5.53 whenAlice uses the workflow, and 4.57 versus 3.02 whenAlice does not use the workflow. Consequently, the Nash Equilibrium occurs when both agents. choose to use the workflow, resulting in payoffs of 5.82 forAlice and 6.50 for Bob. This outcome is. pareto optimal, as neither agent can improve their own payoff without diminishing the other's payoff.. Unlike the Claude-3.5 Sonnet scenario, where mutual defection led to a suboptimal equilibrium, the. Claude-3 Opus scenario demonstrates that aligned incentives and the adoption of the workflow can. lead to mutually beneficial and efficient outcomes.. ",
+        "page_idx": 31
+    },
+    {
+        "type": "text",
+        "text": "5.6.1 Comparison and Implications ",
+        "text_level": 1,
+        "page_idx": 31
+    },
+    {
+        "type": "text",
+        "text": "The analyses of Claude-3.5 Sonnet, GPT-4o, and Claude-3 Opus reveal distinct strategic dynamics based on their respective payoff matrices: ",
+        "page_idx": 31
+    },
+    {
+        "type": "text",
+        "text": ": Claude-3.5 Sonnet: Exhibits a classic Prisoner's Dilemma structure where the dominant strategy for both agents is to defect (not use the workflow), leading to a Nash Equilibrium that is not pareto optimal. ",
+        "page_idx": 31
+    },
+    {
+        "type": "text",
+        "text": ": GPT-4o and Claude-3 Opus: Both present scenarios where using the workflow is a dominant. strategy for both agents. This leads to a Nash Equilibrium that is also pareto optimal, where both. agents achieve higher individual and combined payoffs compared to other strategy profiles. These. cases demonstrate that when strategies are aligned and cooperation is incentivized, agents can achieve mutually beneficial outcomes. ",
+        "page_idx": 31
+    },
+    {
+        "type": "text",
+        "text": "Adopting the workflow consistently results in pareto optimal outcomes across different language models. However, the rationality of this choice -- specifically, whether using the workflow constitutes. a Nash Equilibrium--depends on the particular characteristics of each language model. In the case of Claude-3.5 Sonnet, which demonstrates superior performance when utilizing the workflow, the Nash Equilibrium is observed to be the decision not to adopt the workflow. This outcome may be attributed to Claude-3.5 Sonnet's advanced negotiation capabilities, whereby the implementation of the workflow inadvertently increases its susceptibility to exploitation. Although the workflow. provides certain advantages, these benefits are insufficient to outweigh the risks associated with its adoption. Consequently, Claude-3.5 Sonnet opts to forgo the workflow to mitigate potential. exploitation, despite the inherent benefits the workflow could offer. This suggests that while the workflow can enhance performance, its effectiveness is contingent upon the underlying negotiation strengths of the language model, highlighting the necessity for tailored strategies that align with each model's unique capabilities and vulnerabilities. ",
+        "page_idx": 31
+    },
+    {
+        "type": "text",
+        "text": "Summary for raw-LLM v. workflow-LLM and workflow-LLM v. raw-LLM ",
+        "text_level": 1,
+        "page_idx": 32
+    },
+    {
+        "type": "text",
+        "text": ": Exploitation of Workflow-Enhanced LLMs: Empirical results indicate that LLMs operating without the workflow often achieve higher payoffs when interacting with workflowenhanced LLMs. This suggests that the structured workflow can be exploited by opponents. not utilizing it, potentially leading to suboptimal outcomes for the workflow-enhanced agents. : Strategic Decision on Workflow Adoption: The choice of whether to adopt the workflow itself constitutes a game-theoretic dilemma. The dominant strategy - opting to use or forgo. the workflow - depends on the specific characteristics and strategic incentives of the LLM models involved. This underscores that the rational decision regarding workflow adoption. is contingent upon the model's capabilities and the anticipated behavior of opponents. Meta-Strategy for Workflow Adoption: The question of whether to adopt the workflow introduces a need for a meta-strategy. Agents must consider not only their immediate negotiation tactics but also the higher-level strategy of employing the workflow. This involves weighing the potential benefits of the workflow against the risks of exploitation by opponents who may not be using it. Developing an effective meta-strategy requires agents to assess the specific context, anticipate opponents' choices, and adapt their approach accordingly to maximize their own utility while mitigating vulnerabilities.. ",
+        "page_idx": 32
+    },
+    {
+        "type": "text",
+        "text": "6 Detailed Observation on LLM's Rationality ",
+        "text_level": 1,
+        "page_idx": 32
+    },
+    {
+        "type": "text",
+        "text": "This section provides an additional, comprehensive analysis of the rationality exhibited by LLM-based agents from various perspectives. Using Claude-3 Opus as a representative example, we examine the rational decision-making capabilities of LLMs in single-stage games through the following aspects: ",
+        "page_idx": 32
+    },
+    {
+        "type": "text",
+        "text": "1. Consistency of action choices across variations in payoff matrices: By analyzing the agents'. decisions in different payoff matrix scenarios, we can determine whether the LLM-based agents maintain consistent action choices or if their choices are influenced by nuanced changes in the payoff matrix.   \n2. Consistency of action choices across designated personalities in system prompts: We investigate the impact of assigned personalities in system prompts on the agents' decision-making process. This analysis helps us understand whether the LLM-based agents' rationality is affected by the. designated personality or if they maintain consistent action choices regardless..   \n3. Maintenance of rationality under discussion and multi-round discussions: We explore how the agents' rationality evolves when engaged in discussions or multi-round interactions. This exami-. nation reveals whether the LLM-based agents can maintain their rationality or if it is influenced. by the communication and negotiation processes. ",
+        "page_idx": 32
+    },
+    {
+        "type": "text",
+        "text": "6.1 Experiment Setup ",
+        "text_level": 1,
+        "page_idx": 32
+    },
+    {
+        "type": "text",
+        "text": "In each experimental setup, we conduct 10 iterations utilizing a temperature value of 1 for the Claude-3 model. Each player within these setups is represented by an LLM-based agent. For each configuration, we document the probability distribution of the actions executed by these agents.. ",
+        "page_idx": 32
+    },
+    {
+        "type": "text",
+        "text": "6.2 Variance of Payoff Matrix ",
+        "text_level": 1,
+        "page_idx": 32
+    },
+    {
+        "type": "text",
+        "text": "Definition 13 (Nash-Equilibrium invariant perturbation) $A$ Nash Equilibrium Invariant Perturbation is a modification to the numerical values within a game's payoff matrix that preserves the set of Nash equilibria. Formally, consider a finite game $G=\\bar{(}N,\\{\\bar{S_{o}}\\}_{i\\in N},\\{\\pi_{i}\\}_{i\\in N})$ where $N$ is the set of players, $S_{i}$ is the strategy set for player i, $\\pi_{i}:S\\rightarrow\\mathcal{R}$ is the payoff function for player $i$ A perturbed game $G^{\\prime}=(N,\\{S_{i}\\}_{i\\in N},\\{\\pi_{i}^{\\prime}\\}_{i\\in N})$ of the game $G$ is defined by adjusted payoff functions $\\pi_{i}^{\\prime}=\\pi_{i}+\\delta_{i}$ where $\\delta_{i}:S\\rightarrow\\mathcal{R}$ represnts the change in payoffs for player $i$ .The perturbation $\\delta=\\{\\delta_{i}\\}_{i\\in N}$ is termed a Nash Equilibrium Invariant Perturbation if the set of Nash equilibria remains unchanged between the original game $G$ and the perturbed game $G^{\\prime}$ ",
+        "page_idx": 32
+    },
+    {
+        "type": "text",
+        "text": "Traditional evaluation of LLM on rationality utilize traditional game-theoretic scenarios. If LLMs do have rationality, then their rationality should be consistent across different instantiation of the payoff matrix. ",
+        "page_idx": 33
+    },
+    {
+        "type": "text",
+        "text": "To study this, we use the traditional game of Prisoner's Dilemma and Stag Hunt. ",
+        "page_idx": 33
+    },
+    {
+        "type": "text",
+        "text": "We introduce certain modifications to the traditional payoff matrices while ensuring that the rational. choices remain unaltered. Despite these variations, the Nash Equilibrium remains consistent across all modifications. Consequently, if an agent is rational, it is expected to make the same rational. choices in each scenario. We present the variations here: ",
+        "page_idx": 33
+    },
+    {
+        "type": "table",
+        "img_path": "images/242ba215c9169026a8b4582e878299892567e09d4fed7acb3ff7acc137c56c45.jpg",
+        "table_caption": [],
+        "table_footnote": [
+            "Table $20\\mathrm{a}$ : Variation 1: payoff matrix for Prisoner's Dilemma "
+        ],
+        "table_body": "\n\n<html><body><table><tr><td></td><td>action n1</td><td>action 2</td></tr><tr><td>action 11</td><td>300,300</td><td>0,301</td></tr><tr><td>action 2</td><td>301,0</td><td>1, 1</td></tr></table></body></html>\n\n",
+        "page_idx": 33
+    },
+    {
+        "type": "table",
+        "img_path": "images/131cc723c382827f698ef285de831c47c1b4c63e8f6aaa919d3d63558cd8b7c8.jpg",
+        "table_caption": [],
+        "table_footnote": [
+            "Table 20b: Variation 2: payoff matrix for Prisoner's Dilemma "
+        ],
+        "table_body": "\n\n<html><body><table><tr><td></td><td>action 1</td><td>action 2</td></tr><tr><td>action 1</td><td>3, 3</td><td>-300, 5</td></tr><tr><td>action 2</td><td>5,-300</td><td>-299,-299</td></tr></table></body></html>\n\n",
+        "page_idx": 33
+    },
+    {
+        "type": "table",
+        "img_path": "images/2dbbbd4a758a1b6bd4372934359455013e670b63be3ed3c8ea84028d515cf485.jpg",
+        "table_caption": [
+            "Table 21a: Variation 1: payoff matrix for Stag Hunt "
+        ],
+        "table_footnote": [],
+        "table_body": "\n\n<html><body><table><tr><td></td><td>action 11</td><td>action 2</td></tr><tr><td>action 11</td><td>300,300</td><td>0,1</td></tr><tr><td>action 2</td><td>1, 0</td><td>1, 1</td></tr></table></body></html>\n\n",
+        "page_idx": 33
+    },
+    {
+        "type": "table",
+        "img_path": "images/592473aa7ce428a81bdb8400867e41d29703f5d17acdf911ac5e98ef40f481e2.jpg",
+        "table_caption": [],
+        "table_footnote": [
+            "Table 21b: Variation 2: payoff matrix for Stag Hunt "
+        ],
+        "table_body": "\n\n<html><body><table><tr><td></td><td>action 1</td><td>action 2</td></tr><tr><td>action n1</td><td>3， 3</td><td>-100,-99</td></tr><tr><td>action 2</td><td>-99,-100</td><td>-99, -99</td></tr></table></body></html>\n\n",
+        "page_idx": 33
+    },
+    {
+        "type": "image",
+        "img_path": "images/e983e2bc5eb14401e8b822b75f40351eec3a6c9f16e2501620d3c372b50c203b.jpg",
+        "img_caption": [
+            "Figure 5: Agents' performance under different payoff matrix for Prisoner's Dilemma "
+        ],
+        "img_footnote": [],
+        "page_idx": 33
+    },
+    {
+        "type": "text",
+        "text": "We conduct experiments on these two games with their variations. Figures 5 and 6 contain experiment results of the action distribution. Contrary to the expectation that performance should remain unaffected by payoff variations, the results demonstrate inconsistent performance distribution across different payoff scenarios. In the case of Prisoner's Dilemma, the probability of the rational situation (Action 2, Action 2) is significantly higher in the classic payoff matrix but considerably lower in the two variations. Similarly, in Stag Hunt, the actions taken also vary across different payoff scenarios. These findings suggest that the LLMs are either (1) not consistently making rational decisions or (2) their rationality is heavily influenced by other irrational factors. ",
+        "page_idx": 33
+    },
+    {
+        "type": "image",
+        "img_path": "images/481a5ef07b4e8ac69fafb62572f5ba9e2c3a56d9ac97b89e24794f1b36de3c74.jpg",
+        "img_caption": [
+            "Figure 6: Agents' performance under different payoff matrix for Stag Hunt "
+        ],
+        "img_footnote": [],
+        "page_idx": 34
+    },
+    {
+        "type": "text",
+        "text": "6.3 Variation of Personality ",
+        "text_level": 1,
+        "page_idx": 34
+    },
+    {
+        "type": "text",
+        "text": "In addition to investigating the impact of payoff variations on the rationality of agents, we also examine whether the personality denoted in the system prompt influences the agents' rationality. If the agents are consistent in their computation and calculation of the reward, then their rationality should not be affected by the assigned \"personality\". The system prompt template used for this experiment is as follows: ",
+        "page_idx": 34
+    },
+    {
+        "type": "text",
+        "text": "You are a {{personality}} assistant that carefully answer the question. ",
+        "page_idx": 34
+    },
+    {
+        "type": "text",
+        "text": "For the personality variable, we select six different but common adjectives: compassionate, friendly,. helpful, pragmatic, rational, and witty. The results of this experiment are presented in Figure 7. The findings indicate that the agents' performance varies significantly according to the assigned personality. The \"witty\" personality yields the game-theoretically most rational option, while the rational\" personality performs slightly worse. For other personalities, such as \"compassionate\", \"friendly\", \"helpful\", and \\*pragmatic\", the agents exhibit decreased rationality and frequently make. irrational choices. ",
+        "page_idx": 34
+    },
+    {
+        "type": "text",
+        "text": "6.4Does negotiation affect rationality? ",
+        "text_level": 1,
+        "page_idx": 34
+    },
+    {
+        "type": "text",
+        "text": "In certain situations, the decision-making process of agents can be influenced by discussions with other agents. For instance, in the game of Stag Hunt, effective negotiation can foster trust between players, enabling them to recognize that individual efforts to capture a hare are not as advantageous as cooperating to hunt a stag. Consequently, successful communication should encourage players to select the pareto optimal Nash equilibrium instead of either of the two available equilibriums. However, there are scenarios where negotiation does not impact the outcome. In the case of Prisoner's Dilemma, communication fails to establish trust, as each player's dominant strategy is to defect. regardless of the other player's action. Therefore, communication is unlikely to affect performance,. as the rational choice remains unchanged.. ",
+        "page_idx": 34
+    },
+    {
+        "type": "image",
+        "img_path": "images/fd984abcf25cbfbae76deffbcb772f2e7b40be5a82886ca394070cb25cc5cfe8.jpg",
+        "img_caption": [
+            "Figure 7: Agents' performance under different system prompt with personality "
+        ],
+        "img_footnote": [],
+        "page_idx": 35
+    },
+    {
+        "type": "text",
+        "text": "In our current experimentation, we focus on four game-theoretic scenarios: Stag Hunt, Battle of the Sexes, Prisoner's Dilemma, and Rock-Paper-Scissors. The impact of negotiation on these games. varies as follows: ",
+        "page_idx": 35
+    },
+    {
+        "type": "text",
+        "text": ": Stag Hunt: In this game, negotiation plays a significant role in achieving the pareto optimal rational. choice. Effective communication between players can foster trust and encourage cooperation, leading to better outcomes for both parties.   \n: Battle of the Sexes: Negotiation is crucial for enhancing coordination between the two players in this game. By discussing their preferences and intentions, players can reach a more coherent and. mutually beneficial strategy.   \nPrisoner's Dilemma: The presence of a single Nash Equilibrium in this game renders negotiation irrelevant. Regardless of any discussion, the rational choice for both players remains the same, and the outcome is determined by their individual decisions. ",
+        "page_idx": 35
+    },
+    {
+        "type": "text",
+        "text": "To investigate the impact of communication on agents' choices, we conduct experiments on both games with and without communication. In the communication setup, agents are allowed to exchange messages before making decisions. We record the action distribution of agents in each setup and present the results in Figure 8 for 0, 1, and 2 rounds of negotiation. ",
+        "page_idx": 35
+    },
+    {
+        "type": "text",
+        "text": "Based on our observations, we have identified several inconsistencies between our expectations and the actual outcomes in the various game-theoretic scenarios: ",
+        "page_idx": 35
+    },
+    {
+        "type": "text",
+        "text": ": Stag Hunt (Figure 8 (b): As expected, negotiation leads to the adoption of the pareto optimal strategy. This result demonstrates that effective communication can facilitate cooperation and achieve better outcomes for all parties involved. : Battle of the Sexes: (Figure 8 (c)): Our findings indicate an increase in coordination between players as the number of negotiation rounds increases. This outcome suggests that negotiation plays a crucial role in enhancing mutual understanding and promoting more coherent strategies. ",
+        "page_idx": 35
+    },
+    {
+        "type": "image",
+        "img_path": "images/5b3bf6ea2bf8be08a9d1dd33e05624acdfe7bd194cc33664b0fc3dcdcb091688.jpg",
+        "img_caption": [
+            "Figure 8: Agents' performance under different numbers of negotiation: O-round, 1-round, 2-round, and 3-round from left to right for the four games "
+        ],
+        "img_footnote": [],
+        "page_idx": 36
+    },
+    {
+        "type": "text",
+        "text": ": Prisoner's Dilemma (Figure 8 (a): Contrary to expectations, players consistently gravitate towards the dominated strategy after negotiation. This result is surprising, as the presence of a single Nash Equilibrium should render negotiation irrelevant. ",
+        "page_idx": 36
+    },
+    {
+        "type": "text",
+        "text": "In summary, our findings suggest that negotiation does not always lead to the pareto optimal decision-. making, and in some cases, it may even result in the loss of rationality. Further investigation is necessary to understand the underlying factors contributing to these unexpected outcomes. ",
+        "page_idx": 36
+    },
+    {
+        "type": "text",
+        "text": "6.5 How does prompt affect the influence of negotiation? ",
+        "text_level": 1,
+        "page_idx": 36
+    },
+    {
+        "type": "text",
+        "text": "Some people may want to ask can we use simple prompt engineering to control the effect of negotiation. ",
+        "page_idx": 36
+    },
+    {
+        "type": "text",
+        "text": "To investigate whether the observed negative impact of negotiation on player rationality can be mitigated through simple prompt engineering, we design six distinct prompts. The first three prompts emphasize caution regarding the other player's statements and encourage the agent to critically evaluate trustworthiness. These prompts are intended to foster a more skeptical and analytical mindset during negotiations. The remaining three prompts are formulated as commands, instructing the agent to make decisions independently without being influenced by the negotiation process. The objective of these prompts is to promote autonomy and self-reliance in the agent's decision-making, potentially minimizing the negative effects of negotiation on rationality. ",
+        "page_idx": 36
+    },
+    {
+        "type": "text",
+        "text": "In our experiment, we incorporate the six designed prompts at the end of the entire action-making prompt for each game. This placement ensures that the prompts serve as a final reminder or instruction to the LLM-based agents, not affected by the length of the negotiation texts. ",
+        "page_idx": 37
+    },
+    {
+        "type": "text",
+        "text": "Prompt 1: Please carefully analyze the negotiation messages, think about.   \nwhether you can trust the other player's message, and make your own decision. ",
+        "page_idx": 37
+    },
+    {
+        "type": "text",
+        "text": "Prompt 2: Please carefully analyze the negotiation messages and make your own decision. ",
+        "page_idx": 37
+    },
+    {
+        "type": "text",
+        "text": "Prompt 3: Carefully analyze and think about whether you can trust the other player's message, and then make your own decision.. ",
+        "page_idx": 37
+    },
+    {
+        "type": "text",
+        "text": "Prompt 4: You can choose your own choice regardless what the other player says. ",
+        "page_idx": 37
+    },
+    {
+        "type": "text",
+        "text": "Prompt 5: You should make your own choice regardless what the other player says. ",
+        "page_idx": 37
+    },
+    {
+        "type": "text",
+        "text": "Prompt 6: You must make your own choice regardless what the other player says. ",
+        "page_idx": 37
+    },
+    {
+        "type": "image",
+        "img_path": "images/6e4e586f02319c041205cb5886e152dfefe32df33a968e222366e013b7b705c5.jpg",
+        "img_caption": [
+            "Figure 9: The effect of the 6 engineered prompts on Prisoner's Dilemma game with different rounds of negotiation: 1-round, 2-round, and 3-round for the three rows "
+        ],
+        "img_footnote": [],
+        "page_idx": 37
+    },
+    {
+        "type": "text",
+        "text": "By comparing the performance of LLM-based agents across these six prompts, we aim to determine whether prompt engineering can effectively control the impact of negotiation on player rationality and improve decision-making outcomes in various game-theoretic scenarios. Figure 10 and Figure 10 illustrate the impact of the six designed prompts on the outcomes of Prisoner's Dilemma and Stag Hunt games, respectively. In each figure, the six columns correspond to the specific prompts used,. while the three rows represent the number of negotiation rounds between the two players before they decide on their actions. ",
+        "page_idx": 37
+    },
+    {
+        "type": "text",
+        "text": "By analyzing these figures, we can assess the effectiveness of each prompt in influencing the players' decision-making processes and evaluate whether prompt engineering can mitigate the effects of negotiation on player's choices as the number of negotiation round increases. ",
+        "page_idx": 37
+    },
+    {
+        "type": "image",
+        "img_path": "images/c96822dfcc89c5079523b3771ea8cd2a11c599c24a9e26e74d996746a8991fb6.jpg",
+        "img_caption": [
+            "Figure 10: The effect of the 6 engineered prompts on Stag Hunt game with different rounds of negotiation: 1-round, 2-round, and 3-round for the three rows. "
+        ],
+        "img_footnote": [],
+        "page_idx": 38
+    },
+    {
+        "type": "text",
+        "text": "In observation, we can see the following situations: ",
+        "page_idx": 38
+    },
+    {
+        "type": "text",
+        "text": "1. Prompt 1, 2, 3, and 4 do not significantly impact the distribution of strategies chosen by the LLM-based agents in both Prisoner's Dilemma and Stag Hunt games. Even when these prompts explicitly ask the agents to consider the trustworthiness of the other player, they do not lead to a more rational strategy selection.   \n2. The prompts have varying degrees of influence on the players' decisions, with Prompt 5 and 6 exerting the most significant impact. In the Prisoner's Dilemma, these prompts completely alter the distribution from a heavy focus on the dominated strategy (action 1, action 1) to the dominant strategy (action 2, action 2). In the Stag Hunt, Prompt 5 and 6 also change the distribution from the pareto optimal strategy (action 1, action 1) to a non-optimal strategy (action 2, action 2) or a mixture of strategies.   \n3. The impact of the prompts can be gradually diminished as the number of negotiation rounds increases. For instance, in the Prisoner's Dilemma, the distribution shifts more towards the dominated strategy as the number of negotiation rounds grows. Similarly, in the Stag Hunt, the distribution moves more towards the pareto optimal strategy as the number of negotiation rounds. increases. ",
+        "page_idx": 38
+    },
+    {
+        "type": "text",
+        "text": "Based on the three observations, we can conclude that the use of engineered prompts does not. genuinely enhance the rationality of the LLM-based agents in the Prisoner's Dilemma and Stag Hunt games. The impact of the prompts on the agents' decision-making process follows a similar trend in. both games, and their influence is diminished as the number of negotiation rounds increases.. ",
+        "page_idx": 38
+    },
+    {
+        "type": "text",
+        "text": "6.6 How does the order of negotiation message affect the action? ",
+        "text_level": 1,
+        "page_idx": 38
+    },
+    {
+        "type": "text",
+        "text": "It is anticipated that the order in which players initiate negotiations will not influence the final actions taken, particularly in the Battle of the Sexes game. In an ideal scenario, neither the first nor the last player should have a distinct advantage in persuading the other player to act in their favor. To ensure that this is indeed the case, we conduct experiments in the Battle of the Sexes game with varying negotiation rounds (1, 2, and 3) and alter the player who initiates the negotiation, with either player 1 or player 2 starting the negotiation process. This experimental design allows us to investigate the. potential impact of negotiation order on the outcomes of the game and assess the fairness of the negotiation process between the two players. ",
+        "page_idx": 38
+    },
+    {
+        "type": "image",
+        "img_path": "images/b123e31ae87ddd5616b9d4df6e4fbfec15f90ba5e34c8d50bc28a7a815af4225.jpg",
+        "img_caption": [
+            "Figure 11: Will the fact that who starts the negotiation affect the result? "
+        ],
+        "img_footnote": [],
+        "page_idx": 39
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 39
+    },
+    {
+        "type": "text",
+        "text": "Based on the observation from Figure11, it is evident that there is no significant change in strategy when the player initiating the negotiation is varied. This observation suggests that the order in which players commence negotiation does not have a substantial impact on the final actions taken in the Battle of the Sexes game. ",
+        "page_idx": 39
+    },
+    {
+        "type": "text",
+        "text": "6.7 Irrationality Compared with Humans ",
+        "text_level": 1,
+        "page_idx": 39
+    },
+    {
+        "type": "text",
+        "text": "The previous observations suggest that Large Language Models (LLMs) lack robust rationality across various scenarios. However, it is well-established that humans, too, do not always behave rationally [68, 69]. This raises an intriguing question: do the irrational tendencies of LLMs mirror those of. humans? ",
+        "page_idx": 39
+    },
+    {
+        "type": "text",
+        "text": "To investigate this, we adopt a game setting from a televsion game show called Golden Balls where two contestants play a variant on the classic Prisoner's Dilemma: In this game, two players independently decide to either \"split' or \"steal\" the jackpot. If both choose to split, they share the jackpot equally. If one player chooses to split and the other steals, the stealer takes the entire jackpot. If both players steal, neither receives any money. Human performance of the game is collected by [70], where players chose to cooperate (i.e., split the jackpot) $53\\%$ of the time on average, a figure consistent with earlier laboratory studies [68, 69]. The decision to cooperate was sensitive to the size. of the jackpot, with cooperation rates decreasing as the stakes increased. ",
+        "page_idx": 39
+    },
+    {
+        "type": "text",
+        "text": "We configured the LLMs to play this game, using the same jackpot sizes as in the human data. Each jackpot size was tested 20 times, resulting in 40 decision-making instances for each size. We then calculated the cooperation rates for the LLMs for different jackpot sizes. ",
+        "page_idx": 39
+    },
+    {
+        "type": "text",
+        "text": "The results of this comparative analysis are presented in Figure 12. Human cooperation rates were. indeed sensitive to the size of the jackpot, with higher cooperation rates for smaller jackpots. This. trend is also observed in [71]. In contrast, the LLMs' decision to cooperate was largely insensitive to the jackpot size, regardless of the \"personality\" prompt used: rational, witty, pragmatic, helpful,. friendly, compassionate. Furthermore, the LLMs' cooperation rates were generally lower than those of the humans. ",
+        "page_idx": 39
+    },
+    {
+        "type": "image",
+        "img_path": "images/cc79755551937e7038817d371e2521bac915a1b49049cddf6805477a8a6cee18.jpg",
+        "img_caption": [
+            "Figure 12: Rationality analysis on Golden Balls game "
+        ],
+        "img_footnote": [],
+        "page_idx": 40
+    },
+    {
+        "type": "text",
+        "text": "While this analysis provides a preliminary comparison of irrational tendencies in LLMs and hu-. mans, it is by no means exhaustive. Further research is needed to establish a more comprehensive understanding of the relationship between human and LLM irrationality. ",
+        "page_idx": 40
+    },
+    {
+        "type": "text",
+        "text": "Summary for raw-LLM v. workflow-LLM and workflow-LLM v. raw-LLM ",
+        "text_level": 1,
+        "page_idx": 40
+    },
+    {
+        "type": "text",
+        "text": ": Lack of Robustness to Numerical Variations: Empirical results indicate that LLMs either do not exhibit rationality or their rationality is highly sensitive to numerical changes. When the payoff matrix undergoes perturbations that leave the Nash Equilibrium unchanged, the performance of LLMs varies significantly.   \n.Impact of Negotiation on Rationality: Consistent with observations made in Section 6, we find that rational choices are undermined by the introduction of negotiation, even in the absence of grounds or guarantees for trust.   \n: Effect of Prompt Variation on Negotiation Impact: The wording of the prompt can mitigate the influence of negotiation on rationality; however, this mitigating effect diminishes as the number of negotiation rounds increases.   \n: Order of Negotiation Initiation: The sequence in which players initiate negotiation does. not significantly affect the game's outcome, even in coordination games such as the Battle. of the Sexes.   \nComparison of Irrationality Between LLMs and Humans: Although LLMs lack robust rationality across various scenarios, the nature of their irrationality differs from that observed in human decision-making. ",
+        "page_idx": 40
+    },
+    {
+        "type": "text",
+        "text": "7 Conclusion ",
+        "text_level": 1,
+        "page_idx": 40
+    },
+    {
+        "type": "text",
+        "text": "This study conducted a comprehensive game-theoretic analysis to evaluate the rationality and effectiveness of adopting a negotiation workflow within Large Language Models (LLMs) across a spectrum of classic strategic scenarios. By modeling interactions through well-established completeinformation games, including the Prisoner's Dilemma, Stag Hunt, Battle of the Sexes, Wait-Go Game, Duopolistic Competition, Escalation Game, Monopoly Game, Draco and Harry Game, we assessed how different LLMs, specifically Claude-3.5 Sonnet, GPT-4o, and Claude-3 Opus, navigate the balance between cooperation and competition. ",
+        "page_idx": 40
+    },
+    {
+        "type": "text",
+        "text": "Expanding our investigation to more realistic settings, we explored the Deal-No-Deal Game, which incorporates incomplete-information, to assess whether LLMs can efficiently allocate resources and. negotiate agreements under conditions of uncertainty. In this context, we designed a workflow based on Bayesian updates to achieve pareto optimal and envy free allocations, thereby enhancing the. negotiation process. ",
+        "page_idx": 41
+    },
+    {
+        "type": "text",
+        "text": "Our findings indicate that the adoption of the workflow generally promotes pareto optimal outcomes,. wherein both agents achieve higher collective payoffs compared to non-cooperative strategies. For. instance, in scenarios like the Stag Hunt and Battle of the Sexes, the workflow facilitated effective negotiation and coordination, enabling LLMs to reach mutually beneficial equilibria. Similarly, in the Deal-No-Deal Game, the structured workflow enhanced decision-making processes, leading to. more efficient resource allocations. ",
+        "page_idx": 41
+    },
+    {
+        "type": "text",
+        "text": "8 Future Directions ",
+        "text_level": 1,
+        "page_idx": 41
+    },
+    {
+        "type": "text",
+        "text": "This study opens several promising avenues for future research: ",
+        "page_idx": 41
+    },
+    {
+        "type": "text",
+        "text": "Exploration of Workflow Vulnerabilities and Defense Mechanisms:. Investigating how negotiation workflows can be exploited through methods such as deception is crucial, particularly in contexts. like the Deal-No-Deal Game. Understanding the potential vulnerabilities within these workflows will enable the development of robust defense strategies to mitigate exploitation risks, thereby enhancing the reliability and security of negotiation protocols. ",
+        "page_idx": 41
+    },
+    {
+        "type": "text",
+        "text": "Strategizing in Multi-Stage Games: Extending the analysis to multi-stage games introduces. additional complexity, as the Nash Equilibrium may differ significantly from that in single-stage. games. Future work should focus on how LLMs can effectively strategize over multiple stages,. accounting for the dynamic evolution of the game state and the opponent's actions. This includes developing algorithms that can anticipate future moves and adjust strategies accordingly to maintain rationality and optimize outcomes. ",
+        "page_idx": 41
+    },
+    {
+        "type": "text",
+        "text": "Development of Meta-Strategy: LLMs should be equipped with the capability to determine when to employ a particular workflow and when to adapt or forgo it. This necessitates the creation of a meta-strategy or meta-workflow that guides the selection of appropriate negotiation strategies based on the specific context, the agent's own abilities, the stage of the game, and the behavior of the opponent. Implementing such a meta-strategy would enhance the adaptability and effectiveness of LLMs across diverse negotiation scenarios. ",
+        "page_idx": 41
+    },
+    {
+        "type": "text",
+        "text": "Alignment with Agent Interests and Stance Adoption:  Currently, LLMs are generally aligned to be helpful and honest, lacking a personalized stance or specific interests. To function as proficient negotiation agents, it is imperative for LLMs to learn and adopt stances that reflect the interests they represent. This involves training LLMs to understand and advocate for particular objectives, thereby balancing their general alignment with the capacity to pursue defined goals within negotiations. Developing methods to instill a clear understanding of their own interests will enhance the LLMs' ability to engage in strategic decision-making and achieve desired outcomes. ",
+        "page_idx": 41
+    },
+    {
+        "type": "text",
+        "text": "These future directions aim to refine the strategic reasoning and negotiation capabilities of LLMs, ensuring they can operate effectively and rationally in complex, real-world scenarios. By addressing. these areas, we can advance the development of LLMs as robust agents capable of navigating intricate. strategic environments while safeguarding against potential vulnerabilities.. ",
+        "page_idx": 41
+    },
+    {
+        "type": "text",
+        "text": "References ",
+        "text_level": 1,
+        "page_idx": 41
+    },
+    {
+        "type": "text",
+        "text": "[1] Xiang Zhang and Dujian Ding. Supervised chain of thought. arXiv preprint arXiv:2410.14198, 2024.   \n[2] Dujian Ding, Ankur Mallick, Chi Wang, Robert Sim, Subhabrata Mukherjee, Victor Ruhle, Laks VS Lakshmanan, and Ahmed Hassan Awadallah. Hybrid llm: Cost-efficient and quality-. aware query routing. arXiv preprint arXiv:2404.14618, 2024. [3] Xi Fang, Weijie Xu, Fiona Anting Tan, Jiani Zhang, Ziqing Hu, Yanjun Jane Qi, Scott Nickleach, Diego Socolinsky, Srinivasan Sengamedu, Christos Faloutsos, et al. Large language models (llms) on tabular data: Prediction, generation, and understanding-a survey. 2024.   \n[4] Sumit Kumar Dam, Choong Seon Hong, Yu Qiao, and Chaoning Zhang. A complete survey on 1lm-based ai chatbots. arXiv preprint arXiv:2406.16937, 2024.   \n[5] Xin Luna Dong, Seungwhan Moon, Yifan Ethan Xu, Kshitiz Malik, and Zhou Yu. Towards next-generation intelligent assistants leveraging llm techniques. In Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining, pages 5792-5793, 2023.   \n[6] Weixin Liang, Zachary Izzo, Yaohui Zhang, Haley Lepp, Hancheng Cao, Xuandong Zhao, Lingjiao Chen, Haotian Ye, Sheng Liu, Zhi Huang, et al. Monitoring ai-modified content at scale: A case study on the impact of chatgpt on ai conference peer reviews. arXiv preprint arXiv:2403.07183, 2024.   \n[7] Yijia Shao, Yucheng Jiang, Theodore A Kanell, Peter Xu, Omar Khattab, and Monica S Lam. Assisting in writing wikipedia-like articles from scratch with large language models. arXiv preprint arXiv:2402.14207, 2024.   \n[8] Xudong Guo, Kaixuan Huang, Jiale Liu, Wenhui Fan, Natalia Velez, Qingyun Wu, Huazheng Wang, Thomas L Griffiths, and Mengdi Wang. Embodied llm agents learn to cooperate in organized teams. arXiv preprint arXiv:2403.12482, 2024.   \n[9] Saaket Agashe, Yue Fan, and Xin Eric Wang. Evaluating multi-agent coordination abilities in large language models. arXiv preprint arXiv:2310.03903, 2023.   \n[10] Zhiheng Xi, Wenxiang Chen, Xin Guo, Wei He, Yiwen Ding, Boyang Hong, Ming Zhang, Junzhe Wang, Senjie Jin, Enyu Zhou, et al. The rise and potential of large language model based agents: A survey. arXiv preprint arXiv:2309.07864, 2023.   \n[11] Federico Bianchi, Patrick John Chia, Mert Yuksekgonul, Jacopo Tagliabue, Dan Jurafsky, and James Zou. How well can llms negotiate? negotiationarena platform and analysis. arXiv preprint arXiv:2402.05863, 2024.   \n[12] John J Horton. Large language models as simulated economic agents: What can we learn from homo silicus? Technical report, National Bureau of Economic Research, 2023.   \n[13] Nian Li, Chen Gao, Mingyu Li, Yong Li, and Qingmin Liao. Econagent: large language model-empowered agents for simulating macroeconomic activities. In Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume 1: Long Papers), pages 15523-15536, 2024.   \n[14] Pei Chen, Boran Han, and Shuai Zhang. Comm: Collaborative multi-agent, multi-reasoning-path prompting for complex problem solving. arXiv preprint arXiv:2404.17729, 2024.   \n[15] Yuan Li, Yixuan Zhang, and Lichao Sun. Metaagents: Simulating interactions of human behaviors for llm-based task-oriented coordination via collaborative generative agents. arXiv preprint arXiv:2310.06500, 2023.   \n[16] Yan Leng and Yuan Yuan.  Do llm agents exhibit social behavior?  arXiv preprint arXiv:2312.15198, 2023.   \n[17] Elizabeth C Stade, Shannon Wiltsey Stirman, Lyle H Ungar, Cody L Boland, H Andrew Schwartz, David B Yaden, Joao Sedoc, Robert J DeRubeis, Robb Willer, and Johannes C Eichstaedt. Large language models could change the future of behavioral healthcare: a proposal for responsible development and evaluation. npj Mental Health Research, 3(1):12, 2024.   \n[18] Zengqing Wu, Shuyuan Zheng, Qianying Liu, Xu Han, Brian Inhyuk Kwon, Makoto Onizuka, Shaojie Tang, Run Peng, and Chuan Xiao. Shall we talk: Exploring spontaneous collaborations of competing llm agents. arXiv preprint arXiv:2402.12327, 2024.   \n[19] I de Zarza, J de Curto, Gemma Roig, Pietro Manzoni, and Carlos T Calafate. Emergent cooperation and strategy adaptation in multi-agent systems: An extended coevolutionary theory with llms. Electronics, 12(12):2722, 2023.   \n[20] Yihuai Lan, Zhiqiang Hu, Lei Wang, Yang Wang, Deheng Ye, Peilin Zhao, Ee-Peng Lim, Hui Xiong, and Hao Wang. Llm-based agent society investigation: Collaboration and confrontation in avalon gameplay. arXiv preprint arXiv:2310.14985, 2023.   \n[21] Tianyang Zhong, Zhengliang Liu, Yi Pan, Yutong Zhang, Yifan Zhou, Shizhe Liang, Zihao Wu, Yanjun Lyu, Peng Shu, Xiaowei Yu, et al. Evaluation of openai o1: Opportunities and challenges of agi. arXiv preprint arXiv:2409.18486, 2024.   \n[22] Mike Lewis, Denis Yarats, Yann N Dauphin, Devi Parikh, and Dhruv Batra. Deal or no deal? end-to-end learning for negotiation dialogues. arXiv preprint arXiv:1706.05125, 2017.   \n[23] Ian Gemp, Yoram Bachrach, Marc Lanctot, Roma Patel, Vibhavari Dasagi, Luke Marris, Georgios Piliouras, and Karl Tuyls. States as strings as strategies: Steering language models with game-theoretic solvers. arXiv preprint arXiv:2402.01704, 2024.   \n[24] Karthik Sreedhar and Lydia Chilton. Simulating human strategic behavior: Comparing single and multi-agent llms. arXiv preprint arXiv:2402.08189, 2024.   \n[25] Elif Akata, Lion Schulz, Julian Coda-Forno, Seong Joon Oh, Matthias Bethge, and Eric Schulz. Playing repeated games with large language models. arXiv preprint arXiv:2305.16867, 2023.   \n[26] Caoyun Fan, Jindou Chen, Yaohui Jin, and Hao He. Can large language models serve as rational players in game theory? a systematic analysis. In Proceedings of the AAAI Conference on Artificial Intelligence, pages 17960-17967, 2024.   \n[27] Shaoguang Mao, Yuzhe Cai, Yan Xia, Wenshan Wu, Xun Wang, Fengyi Wang, Tao Ge, and Furu Wei. Alympics: Language agents meet game theory. arXiv preprint arXiv:2311.03220, 2023.   \n[28] Fulin Guo. Gpt in game theory experiments, 2023.   \n[29] Drew Fudenberg and Jean Tirole. Game theory. MIT press, 1991.   \n[30] Huao Li, Yu Quan Chong, Simon Stepputtis, Joseph Campbell, Dana Hughes, Michael Lewis, and Katia Sycara. Theory of mind for multi-agent collaboration via large language models. arXiv preprint arXiv:2310.10701, 2023.   \n[31] Jen-tse Huang, Eric John Li, Man Ho Lam, Tian Liang, Wenxuan Wang, Youliang Yuan, Wenxiang Jiao, Xing Wang, Zhaopeng Tu, and Michael R Lyu. How far are we on the decisionmaking of llms? evaluating llms' gaming ability in multi-agent environments. arXiv preprint arXiv:2403.11807, 2024.   \n[32] Jinhao Duan, Renming Zhang, James Diffenderfer, Bhavya Kailkhura, Lichao Sun, Elias Stengel-Eskin, Mohit Bansal, Tianlong Chen, and Kaidi Xu. Gtbench: Uncovering the strategic reasoning limitations of llms via game-theoretic evaluations. arXiv preprint arXiv:2402.12348, 2024.   \n[33] Shenzhi Wang, Chang Liu, Zilong Zheng, Siyuan Qi, Shuo Chen, Qisen Yang, Andrew Zhao, Chaofei Wang, Shiji Song, and Gao Huang. Avalon's game of thoughts: Battle against deception through recursive contemplation. arXiv preprint arXiv:2310.01320, 2023.   \n[34] Peter S Park, Simon Goldstein, Aidan O'Gara, Michael Chen, and Dan Hendrycks. Ai deception: A survey of examples, risks, and potential solutions. Patterns, 5(5), 2024.   \n[35] Nunzio Lore and Babak Heydari. Strategic behavior of large language models: Game structure vs. contextual framing. arXiv preprint arXiv:2309.05898, 2023.   \n[36] Julian Coda-Forno, Marcel Binz, Jane X Wang, and Eric Schulz. Cogbench: a large language model walks into a psychology lab. arXiv preprint arXiv:2402.18225, 2024.   \n[37] Hongyi Guo, Zhihan Liu, Yufeng Zhang, and Zhaoran Wang. Can large language models play games? a case study of a self-play approach. arXiv preprint arXiv:2403.05632, 2024.   \n[38] Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed Chi, Quoc V Le, Denny Zhou, et al. Chain-of-thought prompting elicits reasoning in large language models. Advances in neural information processing systems, 35:24824-24837, 2022.   \n[39] Shunyu Yao, Dian Yu, Jeffrey Zhao, Izhak Shafran, Thomas L Griffiths, Yuan Cao, and Karthik Narasimhan. Tree of thoughts: Deliberate problem solving with large language models, 2023.. URL https://arxiv. org/pdf/2305.10601. pdf, 2023.   \n[40] Ollie Liu, Deqing Fu, Dani Yogatama, and Willie Neiswanger. Dellma: A framework for decision making under uncertainty with large language models. arXiv preprint arXiv:2402.02392, 2024.   \n[41] Sihao Hu, Tiansheng Huang, and Ling Liu. Pok\\'ellmon: A human-parity agent for pok\\'emon battles with large language models. arXiv preprint arXiv:2402.01118, 2024. ",
+        "page_idx": 41
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 42
+    },
+    {
+        "type": "text",
+        "text": "",
+        "page_idx": 43
+    },
+    {
+        "type": "text",
+        "text": "45 ",
+        "page_idx": 44
+    },
+    {
+        "type": "text",
+        "text": "[61] Zelai Xu, Chao Yu, Fei Fang, Yu Wang, and Yi Wu. Language agents with reinforcement. learning for strategic play in the werewolf game. arXiv preprint arXiv:2310.18940, 2023.   \n[62] Jiaxian Guo, Bo Yang, Paul Yoo, Bill Yuchen Lin, Yusuke Iwasawa, and Yutaka Matsuo. Suspicion-agent: Playing imperfect information games with theory of mind aware gpt-4. arXiv. preprint arXiv:2309.17277, 2023.   \n[63] John Von Neumann and Oskar Morgenstern. Theory of games and economic behavior: 60th anniversary commemorative edition. In Theory of games and economic behavior. Princeton university press, 2007.   \n[64] R Duncan Luce and Howard Raiffa. Games and decisions: Introduction and critical survey. Courier Corporation, 2012.   \n[65] Martin A Nowak, Karen M Page, and Karl Sigmund. Fairness versus reason in the ultimatum game. Science, 289(5485):1773-1775, 2000.   \n[66] Martin W Cripps. Divisible updating. Manuscript, UCL, 2018.   \n[67] Akshay Krishnamurthy, Keegan Harris, Dylan J Foster, Cyril Zhang, and Aleksandrs Slivkins.. Can large language models explore in-context? arXiv preprint arXiv:2403.15371, 2024.   \n[68] Robyn M Dawes and Richard H Thaler. Anomalies: cooperation. Journal of economic perspectives, 2(3):187-197, 1988.   \n[69] David Sally. Conversation and cooperation in social dilemmas: A meta-analysis of experiments from 1958 to 1992. Rationality and society, 7(1):58-92, 1995.   \n[70] Martijn J Van den Assem, Dennie Van Dolder, and Richard H Thaler. Split or steal? cooperative behavior when the stakes are large. Management Science, 58(1):2-20, 2012.   \n[71] Thierry Post, Martijn J Van den Assem, Guido Baltussen, and Richard H Thaler. Deal or no. deal? decision making under risk in a large-payoff game show. American Economic Review,. 98(1):38-71, 2008. ",
+        "page_idx": 45
+    }
+]
