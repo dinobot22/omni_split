@@ -1,12 +1,17 @@
+import os
 from transformers import PreTrainedTokenizerFast
-from sub_chunker.document_split import DocumentChunker
-from sub_chunker.markdown_split import MarkdownChunker
-from sub_chunker.text_split import SentenceChunker
-from utils.base_utils import save_local_images_func
-
+from .sub_chunker.document_split import DocumentChunker
+from .sub_chunker.markdown_split import MarkdownChunker
+from .sub_chunker.text_split import SentenceChunker
+from .utils.base_utils import save_local_images_func
+from importlib.resources import files
 
 class OmniSplit:
-    def __init__(self, tokenizer_json_path="./model/qwen_tokenizer.json", txt_chunk_size=512):
+    def __init__(self, tokenizer_json_path=None, txt_chunk_size=512):
+        if tokenizer_json_path is None:
+            # 获取当前文件的绝对路径，然后构建模型路径
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            tokenizer_json_path = os.path.join(current_dir, "model", "text_chunker_tokenizer","qwen_tokenizer.json")
         self.tokenizer_json_path = tokenizer_json_path
         self.txt_chunk_size = txt_chunk_size
         self.tokenizer = PreTrainedTokenizerFast(tokenizer_file=self.tokenizer_json_path)

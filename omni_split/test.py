@@ -2,12 +2,12 @@ import json
 from io import BytesIO
 
 # from pprint import pprint
-from omni_split import OmniSplit
+from omni_split.omni_split import OmniSplit
 import docx
 
 from utils.base_utils import replace_hash_in_word_and_return_bytesIO
-
-omni_spliter = OmniSplit(tokenizer_json_path="model/text_chunker_tokenizer/qwen_tokenizer.json", txt_chunk_size=1000)
+from omni_split import download_tokenizer_from_network
+omni_spliter = OmniSplit()
 ## note: test text split
 test_text = True
 if test_text:

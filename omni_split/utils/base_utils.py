@@ -109,3 +109,8 @@ def save_local_images_func(ret_data, image_save_path):
         item['text'] = text
     
     return ret_data
+
+
+def download_tokenizer_from_network(ms=True):
+    if ms:
+        qwen_tokenizer.json

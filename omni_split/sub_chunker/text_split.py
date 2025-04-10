@@ -5,9 +5,8 @@ from bisect import bisect_left
 from itertools import accumulate
 from typing import Any, Callable, List, Literal, Union
 
-from base.chonkie_types import Chunk, Sentence, SentenceChunk
-
-from base.chonkie_base import BaseChunker
+from ..base.chonkie_types import Chunk, Sentence, SentenceChunk
+from ..base.chonkie_base import BaseChunker
 
 
 from transformers import PreTrainedTokenizerFast

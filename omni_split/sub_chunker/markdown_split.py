@@ -1,5 +1,5 @@
-from base.md_json_list2chunk import markdown_json_list2chunk_list
-from base.md2json_list import md2json_list_func
+from ..base.md_json_list2chunk import markdown_json_list2chunk_list
+from ..base.md2json_list import md2json_list_func
 
 
 class MarkdownChunker:
