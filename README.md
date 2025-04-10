@@ -1,16 +1,14 @@
 
 
 
-# omni_split
+# omni_split: Split commonly used document (md, doc etc.) forms for RAG that support LLM.
+---
+<img src="./docs/icon.png" alt="omni_split" >
 
-<img src="./docs/icon.png" alt="omni_split" height="260">
+---
+###  note: All other text formats are highly recommended to be converted to Markdown, and we focus on optimizing documents for Markdown. 
 
-
-### Split commonly used document (md, doc etc.) forms for RAG that support LLM.
-
-```
-note: All other text formats are highly recommended to be converted to Markdown, and we focus on optimizing documents for Markdown. 
-```
+---
 # usage
 ###  install 
 ```bash
