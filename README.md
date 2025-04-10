@@ -3,7 +3,7 @@
 
 # omni_split
 
-<img src="./docs/icon.png" alt="omni_split" height="300">
+<img src="./docs/icon.png" alt="omni_split" height="260">
 
 
 ### Split commonly used document (md, doc etc.) forms for RAG that support LLM.
