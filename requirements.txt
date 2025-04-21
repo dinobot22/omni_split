@@ -2,3 +2,5 @@ mistletoe
 transformers
 markitdown[pptx,docx,xlsx,xls]
 python-docx
+loguru
+wand

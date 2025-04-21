@@ -1,6 +1,6 @@
 import json
 from omni_split import OmniSplit
-from omni_split import replace_hash_in_word_and_return_bytesIO
+from omni_split import word_preprocessing_and_return_bytesIO
 
 omni_spliter = OmniSplit()
 ## note: test text split
@@ -53,7 +53,7 @@ if test_markdown:
 test_document = True
 if test_document:
 
-    new_doc_io = replace_hash_in_word_and_return_bytesIO("omni_split/test/docx_test.docx")
+    new_doc_io = word_preprocessing_and_return_bytesIO("omni_split/test/docx_test.docx")
     res = omni_spliter.document_chunk_func(new_doc_io, txt_chunk_size=1000, clear_model=False)
     for item in res:
         print(item)

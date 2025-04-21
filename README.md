@@ -7,7 +7,6 @@
 
 ---
 ###  note: All other text formats are highly recommended to be converted to Markdown, and we focus on optimizing documents for Markdown. 
-
 ---
 # usage
 ###  install 
@@ -18,10 +17,11 @@ pip install omni_split
 ```python 
 import json
 from omni_split import OmniSplit
-from omni_split import replace_hash_in_word_and_return_bytesIO
+from omni_split import word_preprocessing_and_return_bytesIO
 from omni_split import download_files_to_test_doc
 
 ### == step 2: download test_doc file ==
+
 doc_dict = download_files_to_test_doc()
 text_doc_file_path = doc_dict["text_test.txt"]
 json_list_doc_file_path = doc_dict["json_list_test.json"]
@@ -30,7 +30,9 @@ word_doc_file_path = doc_dict["docx_test.docx"]
 
 
 ### == step 3: split  to chunk ==
+
 omni_spliter = OmniSplit()
+
 ## note: test text split
 test_text = True
 if test_text:
@@ -81,7 +83,7 @@ if test_markdown:
 test_document = True
 if test_document:
 
-    new_doc_io = replace_hash_in_word_and_return_bytesIO(word_doc_file_path)
+    new_doc_io = word_preprocessing_and_return_bytesIO(word_doc_file_path)
     res = omni_spliter.document_chunk_func(new_doc_io, txt_chunk_size=1000, clear_model=False)
     for item in res:
         print(item)
@@ -101,3 +103,7 @@ if test_document:
     print("=" * 10)
 
 ```
+# Reminder of dependency:
+To automatically convert binary metafiles(e.g. x-wmf.) in Word to PNG, you need to install ImageMagick on Linux. 
+Try to install:
+https://docs.wand-py.org/en/latest/guide/install.html

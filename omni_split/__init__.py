@@ -1,5 +1,5 @@
 from .omni_split import OmniSplit
-from .utils.base_utils import replace_hash_in_word_and_return_bytesIO
+from .utils.base_utils import word_preprocessing_and_return_bytesIO
 from .utils.download_test_doc import download_files_to_test_doc
 
 __version__ = "0.0.1"
@@ -11,6 +11,6 @@ __all__ = [
     "__version__",
     "__author__",
     "OmniSplit",
-    "replace_hash_in_word_and_return_bytesIO",
+    "word_preprocessing_and_return_bytesIO",
     "download_files_to_test_doc"
 ]

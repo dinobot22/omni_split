@@ -1,11 +1,17 @@
 from setuptools import setup, find_packages
+import os
+
+def get_requirements():
+    """Read requirements from requirements.txt and return as a list."""
+    with open('requirements.txt', 'r', encoding='utf-8') as f:
+        return [line.strip() for line in f if line.strip() and not line.startswith('#')]
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setup(
     name="omni_split",
-    version="0.0.1a",  # 你的版本号
+    version="0.0.1c",  # 你的版本号
     author="dinobot22",
     author_email="2802701695yyb@gmail.com",
     description="A comprehensive document splitting toolkit",
@@ -22,5 +28,5 @@ setup(
         "Operating System :: OS Independent",
     ],
     python_requires=">=3.7",
-    install_requires=["mistletoe", "transformers", "markitdown[pptx,docx,xlsx,xls]", "python-docx"],
+    install_requires=get_requirements(),
 )

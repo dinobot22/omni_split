@@ -5,7 +5,7 @@ from io import BytesIO
 from omni_split.omni_split import OmniSplit
 import docx
 
-from utils.base_utils import replace_hash_in_word_and_return_bytesIO
+from utils.base_utils import word_preprocessing_and_return_bytesIO
 from omni_split import download_tokenizer_from_network
 omni_spliter = OmniSplit()
 ## note: test text split
@@ -59,7 +59,7 @@ if test_markdown:
 test_document = True
 if test_document:
 
-    new_doc_io = replace_hash_in_word_and_return_bytesIO("./test/docx_test.docx")
+    new_doc_io = word_preprocessing_and_return_bytesIO("./test/docx_test.docx")
     res = omni_spliter.document_chunk_func(new_doc_io, txt_chunk_size=1000, clear_model=False)
     for item in res:
         print(item)

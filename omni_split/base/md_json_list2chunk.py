@@ -15,6 +15,7 @@ PSEUDO_EQUATION_FLAG = "[PSEUDO_EQUATION]"
 
 # ---- 核心功能函数 ----
 def count_words(text):
+    ## todo 使用tokenizer来计算字数
     """更精确的字数统计方法（接近Word统计规则）"""
     # 统计中文字符（含中文标点）
     chinese_count = len(re.findall(r"[\u4e00-\u9fa5\u3000-\u303f\uff00-\uffef]", text))
