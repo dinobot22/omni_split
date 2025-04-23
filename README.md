@@ -107,3 +107,11 @@ if test_document:
 To automatically convert binary metafiles(e.g. x-wmf.) in Word to PNG, you need to install ImageMagick on Linux. 
 Try to install:
 https://docs.wand-py.org/en/latest/guide/install.html
+
+--- 
+
+# This project is inspired by: 
+
+1. [chonkie](https://github.com/chonkie-inc/chonkie)
+2. [MinerU](https://github.com/opendatalab/MinerU/tree/master)
+3. [MarkItDown](https://github.com/microsoft/markitdown)
