@@ -1,7 +1,7 @@
 ###  step 2: download test_doc file 
 import json
 from omni_split import OmniSplit
-from omni_split import replace_hash_in_word_and_return_bytesIO
+from omni_split import word_preprocessing_and_return_bytesIO
 from omni_split import download_files_to_test_doc
 
 doc_dict = download_files_to_test_doc()
@@ -63,7 +63,7 @@ if test_markdown:
 test_document = True
 if test_document:
 
-    new_doc_io = replace_hash_in_word_and_return_bytesIO(word_doc_file_path)
+    new_doc_io = word_preprocessing_and_return_bytesIO(word_doc_file_path)
     res = omni_spliter.document_chunk_func(new_doc_io, txt_chunk_size=1000, clear_model=False)
     for item in res:
         print(item)

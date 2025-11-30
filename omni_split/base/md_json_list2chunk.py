@@ -14,7 +14,7 @@ PSEUDO_EQUATION_FLAG = "[PSEUDO_EQUATION]"
 
 
 # ---- 核心功能函数 ----
-def count_words(text):
+def count_words(text, placeholder_size_map=None):
     ## todo 使用tokenizer来计算字数
     """更精确的字数统计方法（接近Word统计规则）"""
     # 统计中文字符（含中文标点）
@@ -24,22 +24,38 @@ def count_words(text):
     # 统计特殊符号（非中文、非字母数字的独立字符）
     special_chars = re.findall(r"(?<!\S)[^\w\u4e00-\u9fa5](?!\S)", text)
 
-    return chinese_count + len(english_words) + len(special_chars)
+    base_count = chinese_count + len(english_words) + len(special_chars)
+
+    if placeholder_size_map:
+        # 查找文本中的占位符并累加其实际长度
+        # 占位符格式: [TYPE]_index, e.g., [TABLE]_0, [IMAGE]_1
+        placeholders = re.findall(r"\[(?:TABLE|IMAGE|EQUATION)\]_\d+", text)
+        for ph in placeholders:
+            if ph in placeholder_size_map:
+                # 加上实际内容的长度
+                base_count += placeholder_size_map[ph]
+                # 减去占位符本身被统计的长度（大致估算）
+                # 占位符通常会被统计为 1 个单词 (e.g. [TABLE]_0) 或几个特殊字符
+                # 这里简单处理：如果不扣除，误差很小且偏向保守（偏大），是安全的
+                # 若要精确，可以计算 ph 的 word count 并减去
+                base_count -= 1 # 简单减去1，假设占位符算作一个词
+
+    return base_count
 
 
-def split_text_by_words(text, max_words, soft_words):
+def split_text_by_words(text, max_words, soft_words, placeholder_size_map=None):
     """智能分块算法，保留原始换行符"""
     chunks = []
     current_count = 0
     buffer = []
 
-    # 按自然断点分割，但不把换行符作为分隔符
-    sentences = re.split(r"([。！？；\.\?!])", text)
-    sentences = [s for s in sentences if s.strip()]
+    # 按自然断点分割，增加换行符作为分隔符，以便处理连续的表格/图片
+    sentences = re.split(r"([。！？；\.\?!]|\n)", text)
+    sentences = [s for s in sentences if s] # 保留换行符，但去掉空字符串 (re.split might produce empty strings)
 
     for i in range(0, len(sentences), 2):
         sentence = sentences[i] + (sentences[i + 1] if i + 1 < len(sentences) else "")
-        sentence_word_count = count_words(sentence)
+        sentence_word_count = count_words(sentence, placeholder_size_map)
 
         # 强制分割条件
         if current_count + sentence_word_count > max_words:
@@ -84,7 +100,7 @@ def find_balanced_split(text):
 
 
 # ---- 文档结构处理 ----
-def process_sections(data, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT):
+def process_sections(data, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT, placeholder_size_map):
     """处理章节结构"""
     processed = []
     current_title = None
@@ -93,23 +109,23 @@ def process_sections(data, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT):
     for item in data:
         if is_section_title(item):
             if current_title is not None:
-                flush_section(current_title, accumulated, processed, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT)
+                flush_section(current_title, accumulated, processed, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT, placeholder_size_map)
             current_title = item["text"]
             accumulated = []
         else:
             accumulated.append(item["text"])
 
-    flush_section(current_title, accumulated, processed, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT)
+    flush_section(current_title, accumulated, processed, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT, placeholder_size_map)
     return processed
 
 
-def flush_section(title, parts, output, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT):
+def flush_section(title, parts, output, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT, placeholder_size_map):
     """处理单个章节内容"""
     full_text = "\n".join(parts)
     if not full_text.strip():
         return
 
-    word_count = count_words(full_text)
+    word_count = count_words(full_text, placeholder_size_map)
 
     if word_count <= MAX_CHUNK_WORDS:
         output.append(build_chunk(title, full_text))
@@ -118,7 +134,7 @@ def flush_section(title, parts, output, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_
         output.append(build_chunk(title, full_text[:split_pos]))
         output.append(build_chunk(None, full_text[split_pos:]))
     else:
-        chunks = split_text_by_words(full_text, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS)
+        chunks = split_text_by_words(full_text, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, placeholder_size_map)
         for i, chunk in enumerate(chunks):
             output.append(build_chunk(title if i == 0 else None, chunk))
 
@@ -136,11 +152,13 @@ def is_section_title(item):
 
 
 # 生成唯一占位符并记录映射
-def generate_placeholder(element_type, content, placeholder_map):
+def generate_placeholder(element_type, content, placeholder_map, placeholder_size_map):
     placeholder = element_placeholder[element_type] + f"_{len(placeholder_map)}"
     placeholder_map.append((placeholder, element_type, content))
+    # 计算 content 的字数并存入 map
+    placeholder_size_map[placeholder] = count_words(content)
     # print(f"Generated placeholder: {placeholder} for {element_type} with content:\n{content}\n")
-    return placeholder, placeholder_map
+    return placeholder, placeholder_map, placeholder_size_map
 
 
 # 根据占位符还原文本内容
@@ -154,7 +172,7 @@ def replace_PSEUDO_EQUATION_FLAG(text, replace_text="\n"):
     return text.replace(PSEUDO_EQUATION_FLAG, replace_text)
 
 
-def merge_element(prev, current, placeholder_map):
+def merge_element(prev, current, placeholder_map, placeholder_size_map):
     """
     * @description:
     # 合并元素：
@@ -191,7 +209,7 @@ def merge_element(prev, current, placeholder_map):
             placeholder_content = current.get("text", "[Equation]")
 
         # 生成占位符并记录映射
-        placeholder, placeholder_map = generate_placeholder(current["type"], placeholder_content, placeholder_map)
+        placeholder, placeholder_map, placeholder_size_map = generate_placeholder(current["type"], placeholder_content, placeholder_map, placeholder_size_map)
 
         # 合并规则：
         # 公式与上下文合并；图像和表格只与上文合并
@@ -200,13 +218,13 @@ def merge_element(prev, current, placeholder_map):
                 # 合并公式到上一个文本段，并标记为假性公式
                 prev["text"] += PSEUDO_EQUATION_FLAG + placeholder
                 prev["is_pseudo_equation"] = True  # 标记为假性公式
-                return prev, None, placeholder_map
+                return prev, None, placeholder_map, placeholder_size_map
         else:
             if prev and prev["type"] == "text":
                 prev["text"] += "\n" + placeholder + "\n"
-                return prev, None, placeholder_map
+                return prev, None, placeholder_map, placeholder_size_map
 
-    return prev, current, placeholder_map
+    return prev, current, placeholder_map, placeholder_size_map
 
 
 def pre_handle_func(data):
@@ -234,6 +252,7 @@ def pre_handle_func(data):
     processed_data = []
     previous_item = None
     placeholder_map = []
+    placeholder_size_map = {} # 新增：用于记录占位符对应的实际字数
     # 主处理流程：合并文本、拆分长文本等
     for item in filtered_data:
         if previous_item:
@@ -244,7 +263,7 @@ def pre_handle_func(data):
                     continue
 
             # 合并元素（图像、表格与上文，公式与上下文）
-            previous_item, item, placeholder_map = merge_element(previous_item, item, placeholder_map)
+            previous_item, item, placeholder_map, placeholder_size_map = merge_element(previous_item, item, placeholder_map, placeholder_size_map)
             if item is None:
                 continue
 
@@ -257,7 +276,19 @@ def pre_handle_func(data):
                     continue
 
                 # 如果当前文本段加上下一个文本段的长度超过 1200，则不合并
-                if len(previous_item["text"]) + len(item["text"]) > 1200:
+                # 注意：这里使用简单的 len() 可能会低估包含占位符的文本实际长度，
+                # 但为了保持原有逻辑大致不变，且考虑到这里是初步合并，暂时保留。
+                # 理想情况应该用 count_words 结合 placeholder_size_map 判断。
+                
+                # Update: 使用更准确的字数统计，以避免在预处理阶段就合并了过大的块，
+                # 导致后续 split_text_by_words 难以处理或产生非预期的巨大块。
+                # 虽然这里硬编码了 1200，但为了解决 "table chunk too long" 问题，
+                # 我们需要在这里也感知占位符的实际大小。
+                
+                prev_len = count_words(previous_item["text"], placeholder_size_map)
+                curr_len = count_words(item["text"], placeholder_size_map)
+                
+                if prev_len + curr_len > 1200:
                     processed_data.append(previous_item)
                     previous_item = item
                     continue
@@ -273,7 +304,7 @@ def pre_handle_func(data):
 
     if previous_item:
         processed_data.append(previous_item)
-    return processed_data, placeholder_map
+    return processed_data, placeholder_map, placeholder_size_map
 
 
 def markdown_json_list2chunk_list(data, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT):
@@ -285,15 +316,20 @@ def markdown_json_list2chunk_list(data, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_
     * @param  HARD_LIMIT :
     * @return
     """
-    pre_handle_data, placeholder_map = pre_handle_func(data=data)
+    pre_handle_data, placeholder_map, placeholder_size_map = pre_handle_func(data=data)
 
-    middle_handle_data = process_sections(pre_handle_data, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT)
+    middle_handle_data = process_sections(pre_handle_data, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT, placeholder_size_map)
     # 统一恢复占位符，确保所有文本中的占位符都被正确替换
     for item in middle_handle_data:
         if item["type"] == "text":
             item["text"] = restore_placeholders(item["text"], placeholder_map)
             item["text"] = replace_PSEUDO_EQUATION_FLAG(item["text"],"\n")
-    final_handle_data = middle_handle_data
+    
+    # 后处理：过滤掉空的文本元素
+    final_handle_data = [
+        item for item in middle_handle_data 
+        if not (item.get("type") == "text" and not item.get("text", "").strip())
+    ]
     return final_handle_data
 
 
