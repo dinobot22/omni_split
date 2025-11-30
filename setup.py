@@ -11,7 +11,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name="omni_split",
-    version="0.0.1c",  # 你的版本号
+    version="0.0.2",  # 你的版本号
     author="dinobot22",
     author_email="2802701695yyb@gmail.com",
     description="A comprehensive document splitting toolkit",

@@ -2,7 +2,7 @@ from .omni_split import OmniSplit
 from .utils.base_utils import word_preprocessing_and_return_bytesIO
 from .utils.download_test_doc import download_files_to_test_doc
 
-__version__ = "0.0.1"
+__version__ = "0.0.2"
 __name__ = "omni_split"
 __author__ = "dinobot22"
 

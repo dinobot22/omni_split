@@ -2,10 +2,18 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Debug tests.test",
+            "name": "tests.test",
             "type": "python",
             "request": "launch",
             "module": "tests.test",
+            "justMyCode": false,
+            "console": "integratedTerminal"
+        },
+                {
+            "name": "local_test.test",
+            "type": "python",
+            "request": "launch",
+            "module": "local_test.test",
             "justMyCode": false,
             "console": "integratedTerminal"
         }
