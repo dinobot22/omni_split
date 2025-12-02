@@ -105,7 +105,8 @@ def process_sections(data, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT, placeh
     processed = []
     current_title = None
     accumulated = []
-
+    if len(data) ==1:
+        data[0]["text_level"] = 0
     for item in data:
         if is_section_title(item):
             if current_title is not None:
@@ -121,7 +122,7 @@ def process_sections(data, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT, placeh
 
 def flush_section(title, parts, output, MAX_CHUNK_WORDS, SOFT_CHUNK_WORDS, HARD_LIMIT, placeholder_size_map):
     """处理单个章节内容"""
-    full_text = "\n".join(parts)
+    full_text =title+ "\n".join(parts)
     if not full_text.strip():
         return
 
@@ -254,11 +255,11 @@ def pre_handle_func(data):
     placeholder_map = []
     placeholder_size_map = {} # 新增：用于记录占位符对应的实际字数
     # 主处理流程：合并文本、拆分长文本等
-    for item in filtered_data:
+    for idx, item in enumerate(filtered_data):
         if previous_item:
             # 合并相邻的 "text_level": 1（标题连续），但如果文本中包含摘要或关键字，则不合并
             if previous_item["type"] == "text" and item["type"] == "text":
-                if previous_item.get("text_level") == 1 and item.get("text_level") == 1:
+                if filtered_data[idx-1]==1 and item.get("text_level") == 1:
                     previous_item["text"] += "-" + item["text"]
                     continue
 
